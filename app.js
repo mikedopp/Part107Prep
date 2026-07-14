@@ -116,6 +116,7 @@ function show(view) {
   if (view === "exam") startExam();
   if (view === "drill") startDrill();
   if (view === "charts") renderChartSchool();
+  if (view === "scenarios") renderScenarios();
   if (view === "reference") renderReference();
 }
 
@@ -614,6 +615,23 @@ function showSpot(name) {
   $("#figimg").className = "";
 }
 
+/* ---------- scenarios ---------- */
+let scenIdx = 0;
+function renderScenarios() {
+  const S2 = window.SCENARIOS || [];
+  if (!S2.length) { $("#main").innerHTML = `<div class="card"><p>No scenarios loaded.</p></div>`; return; }
+  if (scenIdx >= S2.length) scenIdx = 0;
+  let h = `<div class="card"><h2>🗺 Real-world scenarios</h2>
+    <p>Location briefings that tie it all together — read the local METAR, name the airspace, know who to contact and whether you can even fly. Pick a place:</p>
+    <div class="mappicker" id="scenpicker">${S2.map((s, i) =>
+      `<button data-s="${i}" class="${i === scenIdx ? "on" : ""}">${esc(s.name)}</button>`).join("")}</div></div>
+    <div class="card lesson scen">${S2[scenIdx].html}</div>`;
+  $("#main").innerHTML = h;
+  document.querySelectorAll("#scenpicker button").forEach(b =>
+    b.addEventListener("click", () => { scenIdx = Number(b.dataset.s); renderScenarios(); }));
+  window.scrollTo(0, 0);
+}
+
 /* ---------- reference ---------- */
 function renderReference() {
   $("#main").innerHTML = `<div class="card"><h2>Reference library (local copies)</h2><ul class="reflist">
@@ -646,5 +664,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const m = location.hash.match(/^#lesson-(\d+)(?:-step-(\d+))?$/);
   if (m && window.LESSONS[Number(m[1])]) { show("charts"); renderLesson(Number(m[1])); if (m[2]) tourGo(Number(m[2]) - 1); }
   else if (location.hash === "#charts") show("charts");
+  else if (location.hash === "#scenarios") { const s = Number(new URLSearchParams(location.search).get("scen")); if (window.SCENARIOS && window.SCENARIOS[s]) scenIdx = s; show("scenarios"); }
+  else if (location.hash === "#reference") show("reference");
   else show("home");
 });

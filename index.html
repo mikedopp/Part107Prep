@@ -79,6 +79,12 @@
   .lesson table td, .lesson table th { vertical-align: top; }
   .mappicker { display: flex; gap: 6px; flex-wrap: wrap; margin: 4px 0 8px; }
   .mappicker button.on { background: var(--gold); color: #1a1a1a; font-weight: 700; border-color: var(--gold); }
+  .scen svg { width: 100%; height: auto; border-radius: 8px; margin: 8px 0 14px; border: 1px solid var(--line); }
+  .scenwarn { background: #3a3320; border: 1px solid var(--gold-dim); border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 14px; }
+  .scengo { padding: 10px 14px; border-radius: 8px; font-weight: 600; margin: 10px 0; }
+  .scengo.bad { background: #3a2422; border: 1px solid #6c332f; color: #f3d3cf; }
+  .scensrc { font-size: 12px; color: var(--dim); margin-top: 8px; }
+  .scensrc a { color: var(--gold-dim); }
   .spotrow { display: flex; gap: 14px; flex-wrap: wrap; }
   .spotfig { margin: 10px 0; flex: 1 1 260px; max-width: 460px; }
   .spotfig img { width: 100%; border-radius: 8px; border: 2px solid var(--gold-dim); cursor: zoom-in; display: block; }
@@ -129,6 +135,7 @@
     <button data-v="study">Study Mode</button>
     <button data-v="drill">Weak-Spot Drill</button>
     <button data-v="charts">Chart School</button>
+    <button data-v="scenarios">Scenarios</button>
     <button data-v="reference">Reference</button>
   </nav>
 </header>
@@ -139,14 +146,15 @@
   <button id="figclose">Close (or click outside)</button>
 </div>
 
-<script src="qbank_faa.js?v=10"></script>
-<script src="qbank_charts.js?v=10"></script>
-<script src="qbank_reg.js?v=10"></script>
-<script src="qbank_air.js?v=10"></script>
-<script src="qbank_wx.js?v=10"></script>
-<script src="qbank_load.js?v=10"></script>
-<script src="qbank_ops.js?v=10"></script>
-<script src="charts.js?v=10"></script>
-<script src="app.js?v=10"></script>
+<script src="qbank_faa.js?v=11"></script>
+<script src="qbank_charts.js?v=11"></script>
+<script src="qbank_reg.js?v=11"></script>
+<script src="qbank_air.js?v=11"></script>
+<script src="qbank_wx.js?v=11"></script>
+<script src="qbank_load.js?v=11"></script>
+<script src="qbank_ops.js?v=11"></script>
+<script src="charts.js?v=11"></script>
+<script src="scenarios.js?v=11"></script>
+<script src="app.js?v=11"></script>
 </body>
 </html>

@@ -58,6 +58,16 @@ downloads a JSON backup.
 ![Interactive sectional: pick a chart, then tap a numbered symbol to highlight and decode it](docs/interactive.png)
 
 ![METAR & TAF walkthrough with glossary](docs/metar.png)
+- **Scenarios**: real-world location briefings that tie everything together. Each picks a
+  place, shows a labeled situational map, decodes the local METAR with a "so what for
+  your drone" column, names the airspace class, and tells you **who to contact / whether
+  you can even get clearance** — plus local hazards. Ships with **Layton, UT** (Hill AFB
+  Class D corridor, Great Salt Lake / Antelope Island restrictions, Wasatch terrain) and
+  **Salt Lake City** (KSLC Class B, hospitals, tall buildings, freeway/107.145 limits,
+  stadium TFRs). Every scenario carries a "study aid, not an authorization — verify in
+  LAANC/B4UFLY" banner, and the airspace facts are cited to FAA / state sources.
+
+![Layton scenario: situational map, decoded METAR, airspace and clearance briefing](docs/scenario.png)
 - **Figures**: the 8 testing-supplement figures the FAA questions reference
   (sectionals, METAR block, load-factor chart) rendered at 200 DPI in `figures/`,
   shown in a click-to-zoom viewer.
