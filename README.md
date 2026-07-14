@@ -40,17 +40,24 @@ downloads a JSON backup.
 - **Dashboard**: projected exam score, per-area mastery bars, exam history, and the
   "Why you're failing" diagnosis — points lost per area, trap-pattern detection,
   weakest subtopics, and a study prescription.
-- **Chart School**: 9 visual lessons on reading sectional charts and METARs — airspace
+- **Chart School**: 10 visual lessons on reading sectional charts and METARs — airspace
   colors, data blocks, MSL vs AGL, obstacles/MEF, special-use airspace, lat/long
-  plotting, traffic patterns, an interactive METAR decoder, and **Chart Detective**, an
-  animated guided tour that steps through the real Savannah Class C chart one symbol at a
-  time. Lessons use animated diagrams (respecting `prefers-reduced-motion`) plus
-  spotlight crops from the real FAA testing-supplement figures, and drill you on the
-  matching questions.
+  plotting, traffic patterns, and an interactive METAR decoder, plus two hands-on chart
+  tools:
+  - **Chart Detective** — an animated guided tour that steps through the real Savannah
+    Class C chart one symbol at a time, a pulsing highlight gliding to each feature.
+  - **Interactive sectional** — the real Coeur d'Alene chart you can **drag to pan,
+    scroll/pinch to zoom, and tap any numbered symbol** to highlight and decode it
+    (data block, private airport, VOR compass rose, airway, obstacle, Class E surface
+    boundary…). Works with mouse and touch.
+
+  Lessons use animated diagrams (respecting `prefers-reduced-motion`) plus spotlight
+  crops from the real FAA testing-supplement figures, and drill you on the matching
+  questions.
+
+![Interactive sectional: tap a numbered symbol to highlight and decode it](docs/interactive.png)
 
 ![Chart School airspace-stack diagram](docs/chartschool.png)
-
-![Chart Detective guided tour highlighting the 41/13 shelf on a real sectional](docs/tour.png)
 - **Figures**: the 8 testing-supplement figures the FAA questions reference
   (sectionals, METAR block, load-factor chart) rendered at 200 DPI in `figures/`,
   shown in a click-to-zoom viewer.

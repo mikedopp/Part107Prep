@@ -474,7 +474,88 @@ function renderLesson(i) {
     });
   }
   if (L.tour) initTour(L.tour);
+  if (L.explore) initExplore(L.explore);
   window.scrollTo(0, 0);
+}
+
+/* Interactive pan/zoom + tappable sectional */
+let exState = null;
+function initExplore(cfg) {
+  const host = $("#chartexplore"); if (!host) return;
+  exState = { cfg, s: 1, tx: 0, ty: 0, drag: null };
+  host.innerHTML =
+    `<div class="mapviewport" id="mv">
+       <div class="maphint">drag to pan · scroll or ± to zoom · tap a numbered dot</div>
+       <div class="mapworld" id="mw">
+         <img src="figures/${cfg.fig}.png" alt="Interactive sectional chart">
+         <div class="maphotbox" id="exbox" style="display:none"></div>
+         ${cfg.hotspots.map((hd, i) =>
+            `<button class="maphot" data-i="${i}" style="left:${hd.x + hd.w / 2}%;top:${hd.y + hd.h / 2}%">${i + 1}</button>`).join("")}
+       </div>
+       <div class="mapzoom">
+         <button onclick="exZoom(1.3)" title="zoom in">+</button>
+         <button onclick="exZoom(0.77)" title="zoom out">−</button>
+         <button onclick="exReset()" title="reset view">⟲</button>
+       </div>
+     </div>
+     <div class="tourcap" id="excap">Tap any numbered symbol on the chart to decode it.</div>`;
+  const mv = $("#mv"), mw = $("#mw");
+  host.querySelectorAll(".maphot").forEach(b =>
+    b.addEventListener("click", (e) => { e.stopPropagation(); exShow(Number(b.dataset.i)); }));
+  mv.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    const r = mv.getBoundingClientRect();
+    exZoomAt(e.deltaY < 0 ? 1.15 : 0.87, e.clientX - r.left, e.clientY - r.top);
+  }, { passive: false });
+  mv.addEventListener("pointerdown", (e) => {
+    if (e.target.classList.contains("maphot")) return;
+    exState.drag = { x: e.clientX, y: e.clientY, tx: exState.tx, ty: exState.ty };
+    mv.classList.add("grabbing");
+    try { mv.setPointerCapture(e.pointerId); } catch (_) {}
+  });
+  mv.addEventListener("pointermove", (e) => {
+    if (!exState.drag) return;
+    exState.tx = exState.drag.tx + (e.clientX - exState.drag.x);
+    exState.ty = exState.drag.ty + (e.clientY - exState.drag.y);
+    exClamp(); exApply();
+  });
+  const end = () => { exState.drag = null; mv.classList.remove("grabbing"); };
+  mv.addEventListener("pointerup", end);
+  mv.addEventListener("pointercancel", end);
+  mv.addEventListener("dblclick", (e) => {
+    const r = mv.getBoundingClientRect();
+    exZoomAt(1.6, e.clientX - r.left, e.clientY - r.top);
+  });
+  const img = mw.querySelector("img");
+  const setAR = () => { if (img.naturalWidth) mv.style.aspectRatio = img.naturalWidth + "/" + img.naturalHeight; };
+  if (img.complete) setAR(); else img.addEventListener("load", setAR);
+  exApply();
+  const es = new URLSearchParams(location.search).get("exshow");
+  if (es !== null && cfg.hotspots[Number(es)]) exShow(Number(es));
+}
+function exApply() { const mw = $("#mw"); if (mw) mw.style.transform = `translate(${exState.tx}px,${exState.ty}px) scale(${exState.s})`; }
+function exZoom(f) { const r = $("#mv").getBoundingClientRect(); exZoomAt(f, r.width / 2, r.height / 2); }
+function exZoomAt(f, cx, cy) {
+  const ns = Math.max(1, Math.min(3, exState.s * f));
+  const k = ns / exState.s;
+  exState.tx = cx - k * (cx - exState.tx);
+  exState.ty = cy - k * (cy - exState.ty);
+  exState.s = ns;
+  exClamp(); exApply();
+}
+function exReset() { exState.s = 1; exState.tx = 0; exState.ty = 0; exApply(); }
+function exClamp() {
+  const r = $("#mv").getBoundingClientRect();
+  exState.tx = Math.min(0, Math.max(r.width - r.width * exState.s, exState.tx));
+  exState.ty = Math.min(0, Math.max(r.height - r.height * exState.s, exState.ty));
+}
+function exShow(i) {
+  const h = exState.cfg.hotspots[i], box = $("#exbox");
+  box.style.display = "block";
+  box.style.left = h.x + "%"; box.style.top = h.y + "%";
+  box.style.width = h.w + "%"; box.style.height = h.h + "%";
+  $("#excap").innerHTML = `<span class="tourstep">${i + 1}. ${esc(h.title)}</span><br>${esc(h.text)}`;
+  document.querySelectorAll("#mw .maphot").forEach((b, j) => b.classList.toggle("on", j === i));
 }
 
 /* Chart Detective guided tour */

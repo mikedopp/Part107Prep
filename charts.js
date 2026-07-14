@@ -389,6 +389,39 @@ ${spot("spot_cooperstown", "Fig 26: Cooperstown — a magenta (non-towered) fiel
     ]
   }
 },
+
+/* ------------------------------------------------ 10 · Interactive sectional (tap & zoom) */
+{
+  title: "Interactive sectional — tap any symbol",
+  tagline: "The real Coeur d'Alene chart: drag to pan, scroll to zoom, tap a dot to decode it",
+  drill: ["faa-05","cht-08","cht-09","air-05","cht-06","cht-10"],
+  html: `
+<p>This is the live Coeur d'Alene (COE) excerpt from Figure 22 — <b>a real interactive chart</b>. Drag to pan, scroll or use the ± buttons to zoom in, and <b>tap any numbered dot</b> to highlight that symbol and read what it means. This is the whole skill of chart reading: pick any mark and know what it's telling you.</p>
+<div id="chartexplore"></div>
+<p style="margin-top:14px"><b>Try this:</b> zoom into the data block (dot 3) and read it top-to-bottom, then tap the private airport (1) and the VOR compass rose (4). Every symbol on a sectional has a fixed meaning — once these are automatic, the airspace questions are just reading.</p>
+`,
+  explore: {
+    fig: "spot_coe",
+    hotspots: [
+      { x: 10, y: 5, w: 35, h: 15, title: "Private airport — Ranch Aero (Pvt)",
+        text: "A magenta airport symbol with the circled 'R' and '(Pvt)' = a PRIVATE field, no public use without permission. It's charted because its low, slow traffic still matters to you. It sits in Class G here, so no airspace authorization is tied to it — but keep eyes out." },
+      { x: 24, y: 21, w: 37, h: 17, title: "Class E (sfc) — check the NOTAMs",
+        text: "'See NOTAMs/Directory for Class E (sfc) eff hrs.' The dashed magenta line nearby is Class E that starts at the SURFACE — but only part-time. During its effective hours you need ATC authorization; outside them it reverts to Class G. Always check the times before you fly here." },
+      { x: 17, y: 38, w: 40, h: 26, title: "Airport data block (COE)",
+        text: "Coeur d'Alene-Boyington, read top-down: AWOS weather 135.075 · field elevation 2320 ft MSL · *L = part-time lighting · 74 = longest runway 7,400 ft · 122.8 by the solid Ⓒ = CTAF (monitor this) · RP 2 = right-hand traffic pattern for runway 2." },
+      { x: 4, y: 37, w: 16, h: 16, title: "VOR-DME compass rose",
+        text: "The magenta compass rose centered on a VOR-DME navaid. Manned aircraft navigate along its radials, so traffic funnels toward it. The rose is aligned to MAGNETIC north — which is why bearings read off a sectional need no variation correction." },
+      { x: 25, y: 66, w: 37, h: 22, title: "VOR-DME identification box",
+        text: "The navaid's ident box: name (Coeur d'Alene), frequency 108.8, channel 25, and Morse code 'COE'. It's the tune-and-identify data for the VOR-DME — good awareness for where IFR traffic tracks through your area." },
+      { x: 0, y: 60, w: 19, h: 10, title: "Victor airway V120-448",
+        text: "A Victor airway — a low-altitude 'highway' between VORs that IFR and VFR traffic follows. An airway crossing your operating area is a traffic-density flag: more manned aircraft, more vigilance." },
+      { x: 76, y: 17, w: 20, h: 16, title: "Obstacle — 3888 (216)",
+        text: "An obstacle: bold 3888 = the top is 3,888 ft MSL; (216) = 216 ft AGL. The AGL number is yours — 216 ft is under your 400-ft ceiling, but always give towers wide margin (and their unseen guy wires, which are never charted)." },
+      { x: 55, y: 28, w: 15, h: 12, title: "Spot elevation — 5038",
+        text: "A dot with 5038 marks a spot elevation: the highest terrain at that point, 5,038 ft MSL. Terrain and MEF figures are MSL — over rising ground, subtract the local elevation to know your true height AGL before trusting the 400-ft limit." }
+    ]
+  }
+},
 ];
 
 /* METAR interactive data */
