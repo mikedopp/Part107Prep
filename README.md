@@ -3,13 +3,18 @@
 Study/test trainer for the FAA Remote Pilot (Part 107 / UAG) knowledge exam, with
 failure-pattern analysis.
 
+**▶ Live app: https://mikedopp.github.io/Part107Prep/** — runs in any browser, phone or
+desktop, no install. Progress saves locally in that browser.
+
 ![Dashboard with readiness score, exam history, mastery bars, and failure diagnosis](docs/screenshot.png)
 
 ## Run it
 
-Double-click **`Start-Part107Prep.cmd`** (starts a local server on port 8107 and opens
-the browser), or just open `index.html` directly in Edge/Chrome — both work; the server
-version is slightly nicer for viewing the PDF references.
+Easiest: open the **[live app](https://mikedopp.github.io/Part107Prep/)** above.
+
+To run it locally, double-click **`Start-Part107Prep.cmd`** (starts a local server on
+port 8107 and opens the browser), or just open `index.html` directly in Edge/Chrome —
+both work; the server version is slightly nicer for viewing the PDF references.
 
 Progress is stored in browser localStorage (per browser, per origin — stick with one
 way of opening it so your history stays in one place). `Export progress` on the
