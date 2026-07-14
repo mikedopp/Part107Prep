@@ -17,8 +17,8 @@ Dashboard downloads a JSON backup.
 
 ## What's inside
 
-- **155 questions**: all 46 official FAA UAG sample questions (answers verified against
-  published keys) + 109 original questions written from the FAA Remote Pilot Study
+- **167 questions**: all 46 official FAA UAG sample questions (answers verified against
+  published keys) + 121 original questions written from the FAA Remote Pilot Study
   Guide / 14 CFR 107. Every question has an explanation, ACS code, topic, subtopic,
   and "trap" tags (MSL-vs-AGL, true-vs-magnetic, units, stable-vs-unstable, etc.).
 - **Practice Exam**: 60 questions drawn with real exam weighting (Regs 12, Airspace 12,
@@ -30,6 +30,13 @@ Dashboard downloads a JSON backup.
 - **Dashboard**: projected exam score, per-area mastery bars, exam history, and the
   "Why you're failing" diagnosis — points lost per area, trap-pattern detection,
   weakest subtopics, and a study prescription.
+- **Chart School**: 8 visual lessons on reading sectional charts and METARs —
+  airspace colors, data blocks, MSL vs AGL, obstacles/MEF, special-use airspace,
+  lat/long plotting, traffic patterns, and an interactive METAR decoder. Each lesson
+  pairs custom diagrams with spotlight crops from the real FAA testing-supplement
+  figures and drills you on the matching questions.
+
+![Chart School lesson showing the airspace stack diagram](docs/chartschool.png)
 - **Figures**: the 8 testing-supplement figures the FAA questions reference
   (sectionals, METAR block, load-factor chart) rendered at 200 DPI in `figures/`,
   shown in a click-to-zoom viewer.
@@ -42,8 +49,9 @@ All FAA source documents are U.S. government works (public domain).
 ## Question bank files
 
 `qbank_faa.js` (official), `qbank_reg.js`, `qbank_air.js`, `qbank_wx.js`,
-`qbank_load.js`, `qbank_ops.js`. Add questions by appending objects with the same
-shape; `id` must be unique.
+`qbank_load.js`, `qbank_ops.js`, `qbank_charts.js`. Add questions by appending
+objects with the same shape; `id` must be unique. Chart School lessons live in
+`charts.js`.
 
 ## Real exam logistics
 

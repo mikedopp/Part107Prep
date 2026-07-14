@@ -115,6 +115,7 @@ function show(view) {
   if (view === "study") renderStudySetup();
   if (view === "exam") startExam();
   if (view === "drill") startDrill();
+  if (view === "charts") renderChartSchool();
   if (view === "reference") renderReference();
 }
 
@@ -427,6 +428,65 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft") nav(-1);
 });
 
+/* ---------- chart school ---------- */
+function chartLessonStats() {
+  const st = qStats();
+  return (window.LESSONS || []).map(L => {
+    let c = 0, t = 0;
+    for (const id of L.drill) { const s = st[id]; if (s) { t += s.seen; c += s.ok; } }
+    return { c, t };
+  });
+}
+function renderChartSchool() {
+  const stats = chartLessonStats();
+  let h = `<div class="card"><h2>🗺 Chart School</h2><p>How to actually read sectional charts and METARs — the visual skills behind roughly a third of the exam. Each lesson pairs a diagram with spotlights cropped from the <b>real FAA testing-supplement figures</b> you'll get at the test center, then drills you on the matching questions.</p></div>`;
+  (window.LESSONS || []).forEach((L, i) => {
+    const s = stats[i];
+    const p = s.t ? pct(s.c, s.t) : null;
+    h += `<div class="card lessonrow" onclick="renderLesson(${i})">
+      <div><b>${i + 1}. ${L.title}</b><br><small>${L.tagline}</small></div>
+      <div class="lessonstat ${p === null ? "" : p >= 80 ? "good" : p >= 70 ? "warn" : "bad"}">${p === null ? "not drilled" : p + "%"}</div>
+    </div>`;
+  });
+  $("#main").innerHTML = h;
+  window.scrollTo(0, 0);
+}
+function renderLesson(i) {
+  const L = window.LESSONS[i];
+  let h = `<div class="card"><h2>${i + 1}. ${L.title}</h2><p class="meta">${L.tagline}</p></div>
+    <div class="card lesson">${L.html}</div>
+    <div class="card btnrow">
+      <button class="primary" onclick="startLessonDrill(${i})">Drill this lesson (${L.drill.length} questions)</button>
+      ${i > 0 ? `<button onclick="renderLesson(${i - 1})">← Lesson ${i}</button>` : ""}
+      ${i < window.LESSONS.length - 1 ? `<button onclick="renderLesson(${i + 1})">Lesson ${i + 2} →</button>` : ""}
+      <button onclick="renderChartSchool()">All lessons</button>
+    </div>`;
+  $("#main").innerHTML = h;
+  const line = $("#metarline");
+  if (line && window.METAR_TOKENS) {
+    line.innerHTML = window.METAR_TOKENS.map(([tok], j) => `<span class="metar-token" data-j="${j}">${esc(tok)}</span>`).join(" ");
+    line.addEventListener("click", (e) => {
+      const el = e.target.closest(".metar-token"); if (!el) return;
+      line.querySelectorAll(".metar-token").forEach(x => x.classList.toggle("sel", x === el));
+      const [tok, expl] = window.METAR_TOKENS[Number(el.dataset.j)];
+      const box = $("#metarExplain"); box.style.display = "block";
+      box.className = "feedback okq"; box.innerHTML = `<b>${esc(tok)}</b> — ${esc(expl)}`;
+    });
+  }
+  window.scrollTo(0, 0);
+}
+function startLessonDrill(i) {
+  const L = window.LESSONS[i];
+  const qs = L.drill.map(id => byId[id]).filter(Boolean);
+  session = { mode: "study", qs: shuffle(qs), i: 0, answers: {}, instant: true };
+  renderQuiz();
+}
+function showSpot(name) {
+  $("#figmodal").style.display = "flex";
+  $("#figimg").src = "figures/" + name + ".png";
+  $("#figimg").className = "";
+}
+
 /* ---------- reference ---------- */
 function renderReference() {
   $("#main").innerHTML = `<div class="card"><h2>Reference library (local copies)</h2><ul class="reflist">
@@ -456,5 +516,8 @@ window.addEventListener("DOMContentLoaded", () => {
   }));
   $("#figmodal").addEventListener("click", (e) => { if (e.target.id === "figmodal" || e.target.id === "figclose") $("#figmodal").style.display = "none"; });
   $("#figimg").addEventListener("click", function () { this.classList.toggle("zoomed"); });
-  show("home");
+  const m = location.hash.match(/^#lesson-(\d+)$/);
+  if (m && window.LESSONS[Number(m[1])]) { show("charts"); renderLesson(Number(m[1])); }
+  else if (location.hash === "#charts") show("charts");
+  else show("home");
 });
