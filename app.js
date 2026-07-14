@@ -478,12 +478,27 @@ function renderLesson(i) {
   window.scrollTo(0, 0);
 }
 
-/* Interactive pan/zoom + tappable sectional */
+/* Interactive pan/zoom + tappable sectional (multi-chart) */
 let exState = null;
 function initExplore(cfg) {
   const host = $("#chartexplore"); if (!host) return;
-  exState = { cfg, s: 1, tx: 0, ty: 0, drag: null };
+  const charts = cfg.charts || [{ name: "Chart", fig: cfg.fig, hotspots: cfg.hotspots }];
+  exState = { charts, ci: 0, cfg: charts[0], s: 1, tx: 0, ty: 0, drag: null };
   host.innerHTML =
+    `<div class="mappicker" id="mappicker">${charts.map((c, i) =>
+        `<button data-c="${i}" class="${i === 0 ? "on" : ""}">${esc(c.name)}</button>`).join("")}</div>
+     <div id="mapstage"></div>`;
+  host.querySelectorAll("#mappicker button").forEach(b =>
+    b.addEventListener("click", () => exSelectChart(Number(b.dataset.c))));
+  const ec = Number(new URLSearchParams(location.search).get("exchart")) || 0;
+  exSelectChart(charts[ec] ? ec : 0);
+}
+function exSelectChart(ci) {
+  exState.ci = ci; exState.cfg = exState.charts[ci];
+  exState.s = 1; exState.tx = 0; exState.ty = 0; exState.drag = null;
+  document.querySelectorAll("#mappicker button").forEach((b, j) => b.classList.toggle("on", j === ci));
+  const cfg = exState.cfg;
+  $("#mapstage").innerHTML =
     `<div class="mapviewport" id="mv">
        <div class="maphint">drag to pan · scroll or ± to zoom · tap a numbered dot</div>
        <div class="mapworld" id="mw">
@@ -500,7 +515,7 @@ function initExplore(cfg) {
      </div>
      <div class="tourcap" id="excap">Tap any numbered symbol on the chart to decode it.</div>`;
   const mv = $("#mv"), mw = $("#mw");
-  host.querySelectorAll(".maphot").forEach(b =>
+  mv.querySelectorAll(".maphot").forEach(b =>
     b.addEventListener("click", (e) => { e.stopPropagation(); exShow(Number(b.dataset.i)); }));
   mv.addEventListener("wheel", (e) => {
     e.preventDefault();

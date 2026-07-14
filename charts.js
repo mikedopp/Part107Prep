@@ -89,7 +89,7 @@ window.LESSONS = [
   <li><b>Dashed blue</b> = Class D · <b>Dashed magenta</b> = Class E starting at the SURFACE → authorization. The dashed magenta line is the most-missed symbol on the exam — it looks harmless and isn't.</li>
   <li><b>Faded magenta band (vignette)</b> = Class E starts at 700 AGL. You fly under it in Class G — no authorization. Same for areas with no marking (E at 1,200 AGL).</li>
 </ul>
-${spot("spot_jamestown", "Real chart (Fig 26, Jamestown): DASHED BLUE ring = Class D around the airport; the DASHED MAGENTA shape around it = Class E surface extensions. Both need authorization at any altitude.")}
+${spot("spot_jamestown", "Real chart (Fig 26, Jamestown): the DASHED MAGENTA line = Class E starting at the SURFACE — authorization required, and the symbol pilots miss most. The soft brown band is Class E at 700 AGL (you fly under it in Class G at 400 ft). Jamestown has no tower, so no Class D here.")}
 `},
 
 /* ------------------------------------------------ 2 · Data blocks */
@@ -342,23 +342,73 @@ ${spot("spot_garrison", "Fig 21: Garrison sits just south of the 48°N line — 
 ${spot("spot_cooperstown", "Fig 26: Cooperstown — a magenta (non-towered) field where the exam plays out. RWY 13/31 runs NW-SE; left downwind for 13 puts traffic northeast of the field.")}
 `},
 
-/* ------------------------------------------------ 8 · METAR decoder */
+/* ------------------------------------------------ 8 · METAR & TAF walkthrough + glossary */
 {
-  title: "METAR decoder (interactive)",
-  tagline: "Click each chunk of the raw text — the exam shows you exactly this",
+  title: "METAR & TAF — full walkthrough + glossary",
+  tagline: "Decode any weather report cold: tap each chunk, read it in order, look up every code",
   drill: ["faa-25","faa-26","wx-10","wx-18","wx-11"],
   html: `
-<p>This is Chicago Midway from the exam's Figure 12 (question 25). <b>Click each token:</b></p>
+<p><b>1 · Tap-to-decode.</b> This is Chicago Midway (the exam's Figure 12). Click any chunk to see what it means:</p>
 <div class="metar" id="metarline"></div>
 <div class="feedback" id="metarExplain" style="display:none"></div>
-<p style="margin-top:18px"><b>The three traps the exam sets:</b></p>
+
+<h3>2 · Read it in order — every METAR follows the same 9 slots</h3>
+<div style="overflow-x:auto"><table>
+<tr><th>#</th><th>Slot</th><th>Example</th><th>What it means</th></tr>
+<tr><td>1</td><td>Report type</td><td><code>METAR</code></td><td>Routine hourly ob. <code>SPECI</code> = special (issued when something changed fast).</td></tr>
+<tr><td>2</td><td>Station</td><td><code>KMDW</code></td><td>ICAO id. In the lower 48 it's <b>K</b> + the 3-letter airport code.</td></tr>
+<tr><td>3</td><td>Date/time</td><td><code>121856Z</code></td><td>Day 12, 1856 <b>Zulu (UTC)</b> — always Zulu. Convert to local yourself.</td></tr>
+<tr><td>4</td><td>Wind</td><td><code>32005KT</code></td><td>FROM 320° <b>true</b> at 5 kt. <code>G</code> adds gusts; <code>VRB</code> = variable; <code>00000KT</code> = calm.</td></tr>
+<tr><td>5</td><td>Visibility</td><td><code>1 1/2SM</code></td><td>1½ <b>statute</b> miles. <code>10SM</code> = 10+; <code>M1/4SM</code> = less than ¼.</td></tr>
+<tr><td>6</td><td>Weather</td><td><code>RA</code></td><td>Present weather (rain). Built from intensity + descriptor + phenomenon — see glossary.</td></tr>
+<tr><td>7</td><td>Sky cover</td><td><code>OVC007</code></td><td>Overcast at <b>700 ft AGL</b> (heights in hundreds of feet). Ceiling = lowest BKN/OVC.</td></tr>
+<tr><td>8</td><td>Temp/dewpoint</td><td><code>17/16</code></td><td>17°C / dewpoint 16°C. <code>M</code> = minus (<code>M06</code> = -6°C). 1° spread ⇒ fog likely.</td></tr>
+<tr><td>9</td><td>Altimeter</td><td><code>A2980</code></td><td>29.80 inHg (decimal implied). A <code>RMK</code> section may follow.</td></tr>
+</table></div>
+
+<h3>3 · Glossary — look up any code</h3>
+<p><b>Wind</b></p>
+<div style="overflow-x:auto"><table>
+<tr><td><code>32005KT</code></td><td>from 320° true, 5 kt</td><td><code>32015G25KT</code></td><td>320°, 15 kt gusting 25</td></tr>
+<tr><td><code>VRB03KT</code></td><td>variable direction, 3 kt</td><td><code>180V240</code></td><td>direction varying 180°–240°</td></tr>
+<tr><td><code>00000KT</code></td><td>calm</td><td colspan="2">written winds = TRUE north; spoken (ATIS/tower) = magnetic</td></tr>
+</table></div>
+<p><b>Weather = [intensity][descriptor][phenomenon]</b></p>
+<div style="overflow-x:auto"><table>
+<tr><th>Intensity</th><td><code>-</code> light</td><td>(none) moderate</td><td><code>+</code> heavy</td><td><code>VC</code> vicinity</td></tr>
+<tr><th>Descriptor</th><td><code>SH</code> showers</td><td><code>TS</code> t-storm</td><td><code>FZ</code> freezing</td><td><code>MI</code> shallow · <code>BC</code> patchy · <code>BL</code> blowing · <code>DR</code> drifting</td></tr>
+<tr><th>Precip</th><td><code>RA</code> rain · <code>DZ</code> drizzle</td><td><code>SN</code> snow · <code>SG</code> grains</td><td><code>PL</code> ice pellets · <code>GR</code> hail · <code>GS</code> small hail</td><td><code>IC</code> ice crystals · <code>UP</code> unknown</td></tr>
+<tr><th>Obscuration</th><td><code>BR</code> mist (⅝–6 SM)</td><td><code>FG</code> fog (&lt;⅝ SM)</td><td><code>HZ</code> haze · <code>FU</code> smoke</td><td><code>DU/SA</code> dust/sand · <code>VA</code> ash</td></tr>
+<tr><th>Other</th><td><code>PO</code> dust whirls</td><td><code>SQ</code> squall</td><td><code>FC</code> funnel · <code>+FC</code> tornado</td><td><code>SS/DS</code> sand/dust storm</td></tr>
+</table></div>
+<p style="margin-top:6px"><small>Combine them: <code>+TSRA</code> = heavy thunderstorm w/ rain · <code>-SHSN</code> = light snow showers · <code>FZRA</code> = freezing rain (icing!) · <code>VCTS</code> = thunderstorm nearby.</small></p>
+<p><b>Sky cover</b> (eighths of sky = "oktas"; heights in hundreds of ft AGL)</p>
+<div style="overflow-x:auto"><table>
+<tr><td><code>SKC/CLR</code> clear</td><td><code>FEW</code> 1–2/8</td><td><code>SCT</code> 3–4/8</td><td><code>BKN</code> 5–7/8</td><td><code>OVC</code> 8/8</td><td><code>VV004</code> obscured, 400 ft vert vis</td></tr>
+</table></div>
+<p style="margin-top:6px"><small><b>Ceiling</b> = lowest <code>BKN</code> or <code>OVC</code> layer. <code>CB</code>/<code>TCU</code> after a layer = cumulonimbus / towering cumulus — convection, avoid.</small></p>
+<p><b>Remarks (<code>RMK</code>)</b></p>
+<div style="overflow-x:auto"><table>
+<tr><td><code>AO2</code> auto w/ precip sensor (<code>AO1</code> without)</td><td><code>SLP132</code> sea-level press. 1013.2 hPa</td><td><code>RAB35</code> rain began :35 (<code>RAE</code> ended)</td></tr>
+<tr><td><code>PK WND 28045/56</code> peak wind 280°/45 kt at :56</td><td><code>T01720161</code> precise temp 17.2 / dewpt 16.1</td><td><code>$</code> station needs maintenance</td></tr>
+</table></div>
+
+<h3>4 · TAF — the forecast (same codes + change groups)</h3>
+<p>A <b>TAF</b> forecasts weather within <b>5 SM</b> of the airport, issued 4×/day, valid 24–30 hrs. Validity like <code>1512/1618</code> = the 15th 12Z through the 16th 18Z. Extra keywords:</p>
+<div style="overflow-x:auto"><table>
+<tr><td><code>FM1500</code></td><td><b>From</b> 1500Z — a rapid, lasting change; everything after is the new picture</td></tr>
+<tr><td><code>BECMG 1618</code></td><td><b>Becoming</b> — gradual change over 16Z–18Z</td></tr>
+<tr><td><code>TEMPO 2024</code></td><td><b>Temporary</b> (&lt;1 hr each, on/off) between 20Z–24Z</td></tr>
+<tr><td><code>PROB30</code></td><td>30% <b>probability</b> of the conditions that follow</td></tr>
+</table></div>
+
+<h3>5 · The three traps the exam sets</h3>
 <ul>
-  <li><b>Cloud heights are hundreds of feet AGL:</b> OVC007 = 700 ft, OVC070 = 7,000 ft. Count the digits carefully.</li>
-  <li><b>Written wind is TRUE north</b> (spoken tower/ATIS wind is magnetic): 18004KT = from 180° true at 4 kt — don't split it as 040° at 18.</li>
-  <li><b>No sign on RA means moderate:</b> -RA light, RA moderate, +RA heavy. 'Rain' alone in an answer = moderate rain.</li>
+  <li><b>Cloud heights are hundreds of feet AGL:</b> <code>OVC007</code> = 700 ft, <code>OVC070</code> = 7,000 ft. Count the digits.</li>
+  <li><b>Written wind is TRUE north</b> (spoken tower/ATIS is magnetic): <code>18004KT</code> = from 180° true at 4 kt — not 040° at 18.</li>
+  <li><b>No sign = moderate:</b> <code>-RA</code> light, <code>RA</code> moderate, <code>+RA</code> heavy. "Rain" alone in an answer = moderate.</li>
 </ul>
-<p>A <b>TAF</b> is the same code as a forecast: valid within 5 SM of the airport for 24-30 hours; date/time groups like 0512/0618 = from the 5th 12Z to the 6th 18Z.</p>
-<button class="primary" onclick="showFig(12)">Open the full Figure 12 METAR page</button>
+<button class="primary" onclick="showFig(12)">Open the full Figure 12 (real METAR/TAF page)</button>
 `},
 
 /* ------------------------------------------------ 9 · Chart Detective (guided tour) */
@@ -396,13 +446,13 @@ ${spot("spot_cooperstown", "Fig 26: Cooperstown — a magenta (non-towered) fiel
   tagline: "The real Coeur d'Alene chart: drag to pan, scroll to zoom, tap a dot to decode it",
   drill: ["faa-05","cht-08","cht-09","air-05","cht-06","cht-10"],
   html: `
-<p>This is the live Coeur d'Alene (COE) excerpt from Figure 22 — <b>a real interactive chart</b>. Drag to pan, scroll or use the ± buttons to zoom in, and <b>tap any numbered dot</b> to highlight that symbol and read what it means. This is the whole skill of chart reading: pick any mark and know what it's telling you.</p>
+<p><b>Five real exam charts you can explore.</b> Pick a chart, then drag to pan, scroll or use the ± buttons to zoom, and <b>tap any numbered dot</b> to highlight that symbol and read what it means. Works with mouse or touch.</p>
 <div id="chartexplore"></div>
-<p style="margin-top:14px"><b>Try this:</b> zoom into the data block (dot 3) and read it top-to-bottom, then tap the private airport (1) and the VOR compass rose (4). Every symbol on a sectional has a fixed meaning — once these are automatic, the airspace questions are just reading.</p>
+<p style="margin-top:14px"><b>Switch charts</b> with the buttons up top: data blocks & navaids (COE), the Class C bullseye (Savannah), Class E to the surface (Jamestown), a Military Operations Area (Devils Lake), and military training routes (Deshler). Every symbol has one fixed meaning — once these are automatic, the airspace questions are just reading.</p>
 `,
   explore: {
-    fig: "spot_coe",
-    hotspots: [
+    charts: [
+    { name: "Coeur d'Alene — data blocks & navaids", fig: "spot_coe", hotspots: [
       { x: 10, y: 5, w: 35, h: 15, title: "Private airport — Ranch Aero (Pvt)",
         text: "A magenta airport symbol with the circled 'R' and '(Pvt)' = a PRIVATE field, no public use without permission. It's charted because its low, slow traffic still matters to you. It sits in Class G here, so no airspace authorization is tied to it — but keep eyes out." },
       { x: 24, y: 21, w: 37, h: 17, title: "Class E (sfc) — check the NOTAMs",
@@ -419,6 +469,59 @@ ${spot("spot_cooperstown", "Fig 26: Cooperstown — a magenta (non-towered) fiel
         text: "An obstacle: bold 3888 = the top is 3,888 ft MSL; (216) = 216 ft AGL. The AGL number is yours — 216 ft is under your 400-ft ceiling, but always give towers wide margin (and their unseen guy wires, which are never charted)." },
       { x: 55, y: 28, w: 15, h: 12, title: "Spot elevation — 5038",
         text: "A dot with 5038 marks a spot elevation: the highest terrain at that point, 5,038 ft MSL. Terrain and MEF figures are MSL — over rising ground, subtract the local elevation to know your true height AGL before trusting the 400-ft limit." }
+    ] },
+    { name: "Savannah — Class C bullseye", fig: "spot_savannah", hotspots: [
+      { x: 14, y: 28, w: 50, h: 60, title: "The two magenta rings = Class C",
+        text: "An inner CORE circle over the airport plus an outer SHELF ring, both solid magenta. Inside either ring you need ATC authorization (LAANC)." },
+      { x: 50, y: 11, w: 17, h: 9, title: "'SAVANNAH CLASS C' label",
+        text: "The printed class name. The class sets the rule; the fractions inside give the altitudes." },
+      { x: 15, y: 44, w: 11, h: 14, title: "Shelf fraction 41/13",
+        text: "Ceiling over floor in hundreds of ft MSL: 4,100 MSL top, 1,300 MSL floor. Charted altitudes are MSL unless in parentheses — this is exam Q8." },
+      { x: 24, y: 55, w: 13, h: 13, title: "Core fraction 41/SFC",
+        text: "Over the airport: 4,100 MSL down to the SURFACE. No shelf here — authorization needed from the ground up." },
+      { x: 30, y: 64, w: 13, h: 13, title: "The primary airport (SAV)",
+        text: "Blue airport symbol = towered (Savannah/Hilton Head). Class C exists to protect this busy field's traffic." },
+      { x: 63, y: 69, w: 18, h: 8, title: "CTAF / tower frequency",
+        text: "The frequency by the solid Ⓒ in the data block — monitor it to hear inbound traffic." }
+    ] },
+    { name: "Jamestown — Class E surface & 700", fig: "spot_jamestown", hotspots: [
+      { x: 45, y: 66, w: 17, h: 12, title: "Class E to the SURFACE — dashed MAGENTA",
+        text: "The dashed magenta line = Class E that starts at the SURFACE. It needs ATC authorization just like B/C/D, and it's the symbol drone pilots miss most. Jamestown has no control tower, so it's Class E — not Class D." },
+      { x: 32, y: 79, w: 20, h: 11, title: "Class E floor at 700 AGL — brown vignette",
+        text: "The soft brown gradient band lowers Class E's floor to 700 ft AGL. At 400 ft you're UNDER it, in Class G — no authorization needed. Only the dashed-magenta surface part requires it." },
+      { x: 38, y: 36, w: 36, h: 13, title: "Jamestown Rgnl (JMS) data block",
+        text: "ASOS weather 118.425 · field elevation 1500 ft MSL · *L part-time lighting · 65 = 6,500-ft runway · 123.0 by the Ⓒ = CTAF." },
+      { x: 44, y: 50, w: 13, h: 13, title: "The airport it protects",
+        text: "The field the Class E surface area exists for. Class-E-to-surface wraps non-towered fields that have instrument approaches, so IFR traffic is protected to the ground — monitor the CTAF and get authorization for the surface area." },
+      { x: 1, y: 72, w: 38, h: 15, title: "Jamestown VOR-DME navaid box",
+        text: "The navaid ident box: name, frequency, channel 92, Morse ident 'JMS'. The blue tick-marked compass rose on the chart is centered on it — IFR traffic tracks along its radials." },
+      { x: 79, y: 8, w: 19, h: 13, title: "Private airport (Pvt)",
+        text: "Mutschler (Pvt) with a circled R = private, permission-only. Charted for its low traffic; sits in Class G." }
+    ] },
+    { name: "Devils Lake — MOA & special use", fig: "spot_moa", hotspots: [
+      { x: 13, y: 22, w: 11, h: 22, title: "MOA boundary — magenta HATCHED line",
+        text: "A magenta line with hatching on the inside marks Special-Use Airspace — here a Military Operations Area. VFR/drone flight isn't barred, but expect fast military traffic." },
+      { x: 30, y: 52, w: 40, h: 11, title: "'DEVILS LAKE WEST MOA' label",
+        text: "The MOA's name. Its active hours, altitudes, and controlling agency live in the chart's Special-Use Airspace panel (the legend) — check status before flying." },
+      { x: 24, y: 40, w: 20, h: 13, title: "Military Training Route IR644-649",
+        text: "A gray line with an IR number = an Instrument military training route crossing the MOA. Military jets, often low and fast." },
+      { x: 42, y: 72, w: 16, h: 13, title: "Obstacle 2361 (260)",
+        text: "Tower: top 2,361 ft MSL; (260) = 260 ft AGL. The AGL number is yours — under 400 ft, but give it margin." },
+      { x: 1, y: 78, w: 22, h: 13, title: "Private airport (Pvt)",
+        text: "OKeefe (Pvt), circled R = private/permission-only. Charted for traffic awareness." }
+    ] },
+    { name: "Deshler — military routes & obstacles", fig: "spot_mtr", hotspots: [
+      { x: 26, y: 24, w: 15, h: 32, title: "Military Training Routes — VR stack",
+        text: "Gray lines labeled VR1667/VR1617/VR1638/VR1668. FOUR-digit VR routes are flown at or BELOW 1,500 ft AGL — your altitude, at 250+ knots. This is exam Q30." },
+      { x: 66, y: 15, w: 28, h: 17, title: "Deshler (6D7) data block",
+        text: "Non-towered field: elevation, lighting, and 122.9 by the Ⓒ = CTAF. The magenta airport symbol confirms there's no control tower." },
+      { x: 70, y: 39, w: 18, h: 12, title: "Tall obstacle 1817 (1090)",
+        text: "Top 1,817 ft MSL, and (1090) = 1,090 ft AGL — WAY above your 400-ft ceiling. Route around towers like this, and mind their unseen guy wires." },
+      { x: 1, y: 45, w: 23, h: 13, title: "Private airport (Pvt)",
+        text: "Hiltner (Pvt), circled R = private. Low traffic, Class G." },
+      { x: 46, y: 80, w: 36, h: 13, title: "Putnam Co (OWX) data block",
+        text: "AWOS 120.525 · field elevation 764 MSL · *L 45 = 4,500-ft runway. Read every data block the same way." }
+    ] }
     ]
   }
 },

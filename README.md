@@ -40,24 +40,24 @@ downloads a JSON backup.
 - **Dashboard**: projected exam score, per-area mastery bars, exam history, and the
   "Why you're failing" diagnosis — points lost per area, trap-pattern detection,
   weakest subtopics, and a study prescription.
-- **Chart School**: 10 visual lessons on reading sectional charts and METARs — airspace
+- **Chart School**: 10 visual lessons on reading sectional charts and weather — airspace
   colors, data blocks, MSL vs AGL, obstacles/MEF, special-use airspace, lat/long
-  plotting, traffic patterns, and an interactive METAR decoder, plus two hands-on chart
-  tools:
+  plotting, traffic patterns, a **full METAR & TAF walkthrough with a code glossary**,
+  plus two hands-on chart tools:
   - **Chart Detective** — an animated guided tour that steps through the real Savannah
     Class C chart one symbol at a time, a pulsing highlight gliding to each feature.
-  - **Interactive sectional** — the real Coeur d'Alene chart you can **drag to pan,
-    scroll/pinch to zoom, and tap any numbered symbol** to highlight and decode it
-    (data block, private airport, VOR compass rose, airway, obstacle, Class E surface
-    boundary…). Works with mouse and touch.
+  - **Interactive sectional** — **five real exam charts** (Coeur d'Alene data blocks,
+    Savannah Class C, Jamestown Class E surface, a Devils Lake MOA, and Deshler military
+    routes) you can **drag to pan, scroll/pinch to zoom, and tap any numbered symbol** to
+    highlight and decode it. Works with mouse and touch.
 
   Lessons use animated diagrams (respecting `prefers-reduced-motion`) plus spotlight
   crops from the real FAA testing-supplement figures, and drill you on the matching
-  questions.
+  questions. Chart facts were cross-checked against FAA sources.
 
-![Interactive sectional: tap a numbered symbol to highlight and decode it](docs/interactive.png)
+![Interactive sectional: pick a chart, then tap a numbered symbol to highlight and decode it](docs/interactive.png)
 
-![Chart School airspace-stack diagram](docs/chartschool.png)
+![METAR & TAF walkthrough with glossary](docs/metar.png)
 - **Figures**: the 8 testing-supplement figures the FAA questions reference
   (sectionals, METAR block, load-factor chart) rendered at 200 DPI in `figures/`,
   shown in a click-to-zoom viewer.
