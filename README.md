@@ -8,17 +8,22 @@ desktop, no install. Progress saves locally in that browser.
 
 ![Dashboard with readiness score, exam history, mastery bars, and failure diagnosis](docs/screenshot.png)
 
-## Run it
+## Run it — three ways
 
-Easiest: open the **[live app](https://mikedopp.github.io/Part107Prep/)** above.
+1. **Web (any device):** open the **[live app](https://mikedopp.github.io/Part107Prep/)**. No install; works on your phone.
+2. **Desktop app (Windows):** double-click **`Build-App.cmd`** once to compile, then run
+   `app\bin\Release\net8.0-windows\Part107Prep.exe` (a real .exe you can pin to the
+   taskbar). It's a WinForms + WebView2 shell that runs the whole trainer **offline** —
+   no server, no browser tab. Needs the free .NET 8 SDK to build and the Edge WebView2
+   runtime to run (both already standard on Windows 10/11).
+3. **Local browser:** double-click `Start-Part107Prep.cmd` (serves on port 8107), or just
+   open `index.html` in Edge/Chrome.
 
-To run it locally, double-click **`Start-Part107Prep.cmd`** (starts a local server on
-port 8107 and opens the browser), or just open `index.html` directly in Edge/Chrome —
-both work; the server version is slightly nicer for viewing the PDF references.
+![The Part 107 Prep desktop app running as a native Windows window](docs/app-screenshot.png)
 
-Progress is stored in browser localStorage (per browser, per origin — stick with one
-way of opening it so your history stays in one place). `Export progress` on the
-Dashboard downloads a JSON backup.
+Progress is stored in localStorage per app/browser, so pick one home and stick with it
+(the desktop app keeps its own persistent store). `Export progress` on the Dashboard
+downloads a JSON backup.
 
 ## What's inside
 
@@ -35,13 +40,17 @@ Dashboard downloads a JSON backup.
 - **Dashboard**: projected exam score, per-area mastery bars, exam history, and the
   "Why you're failing" diagnosis — points lost per area, trap-pattern detection,
   weakest subtopics, and a study prescription.
-- **Chart School**: 8 visual lessons on reading sectional charts and METARs —
-  airspace colors, data blocks, MSL vs AGL, obstacles/MEF, special-use airspace,
-  lat/long plotting, traffic patterns, and an interactive METAR decoder. Each lesson
-  pairs custom diagrams with spotlight crops from the real FAA testing-supplement
-  figures and drills you on the matching questions.
+- **Chart School**: 9 visual lessons on reading sectional charts and METARs — airspace
+  colors, data blocks, MSL vs AGL, obstacles/MEF, special-use airspace, lat/long
+  plotting, traffic patterns, an interactive METAR decoder, and **Chart Detective**, an
+  animated guided tour that steps through the real Savannah Class C chart one symbol at a
+  time. Lessons use animated diagrams (respecting `prefers-reduced-motion`) plus
+  spotlight crops from the real FAA testing-supplement figures, and drill you on the
+  matching questions.
 
-![Chart School lesson showing the airspace stack diagram](docs/chartschool.png)
+![Chart School airspace-stack diagram](docs/chartschool.png)
+
+![Chart Detective guided tour highlighting the 41/13 shelf on a real sectional](docs/tour.png)
 - **Figures**: the 8 testing-supplement figures the FAA questions reference
   (sectionals, METAR block, load-factor chart) rendered at 200 DPI in `figures/`,
   shown in a click-to-zoom viewer.
@@ -55,8 +64,8 @@ All FAA source documents are U.S. government works (public domain).
 
 `qbank_faa.js` (official), `qbank_reg.js`, `qbank_air.js`, `qbank_wx.js`,
 `qbank_load.js`, `qbank_ops.js`, `qbank_charts.js`. Add questions by appending
-objects with the same shape; `id` must be unique. Chart School lessons live in
-`charts.js`.
+objects with the same shape; `id` must be unique. Chart School lessons (and the
+Chart Detective tour hotspots) live in `charts.js`; the desktop shell is in `app/`.
 
 ## Real exam logistics
 

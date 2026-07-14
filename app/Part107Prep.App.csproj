@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>Part107Prep</AssemblyName>
+    <RootNamespace>Part107Prep</RootNamespace>
+    <Version>1.0.0</Version>
+    <Product>Part 107 Prep</Product>
+    <AssemblyTitle>Part 107 Prep — Remote Pilot Exam Trainer</AssemblyTitle>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+  </PropertyGroup>
+
+  <!-- Bundle the web app into wwwroot next to the exe (served offline via a virtual host) -->
+  <ItemGroup>
+    <Content Include="..\index.html">
+      <Link>wwwroot\index.html</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\*.js">
+      <Link>wwwroot\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\figures\*.png">
+      <Link>wwwroot\figures\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\faa_docs\remote_pilot_study_guide.pdf">
+      <Link>wwwroot\faa_docs\remote_pilot_study_guide.pdf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\faa_docs\uag_questions.pdf">
+      <Link>wwwroot\faa_docs\uag_questions.pdf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4078.44" />
+  </ItemGroup>
+
+</Project>

@@ -5,3 +5,7 @@ faa_docs/akts_supplement.pdf
 faa_docs/uag_questions.txt
 faa_docs/rrpc_exam_2016.pdf
 faa_docs/rrpc_exam_2016.txt
+
+# .NET build output for the desktop app
+app/bin/
+app/obj/

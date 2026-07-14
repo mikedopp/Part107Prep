@@ -17,67 +17,71 @@ window.LESSONS = [
   tagline: "Which chunks of sky need permission, and how each is drawn",
   drill: ["air-01","air-02","air-04","air-05","air-16","air-19","faa-03"],
   html: `
-<svg viewBox="0 0 960 500" xmlns="http://www.w3.org/2000/svg" role="img">
-  <rect x="0" y="30" width="960" height="42" fill="#9a978f22" stroke="#9a978f" stroke-dasharray="none"/>
-  <text x="480" y="57" fill="#9a978f" font-size="17" text-anchor="middle">CLASS A — 18,000 ft MSL and up · IFR only · a drone can never get here</text>
+<svg viewBox="0 0 960 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The airspace stack diagram">
+  <!-- Class A band -->
+  <rect x="0" y="16" width="960" height="34" fill="#9a978f22" stroke="#9a978f"/>
+  <text x="480" y="38" fill="#9a978f" font-size="16" text-anchor="middle">CLASS A — 18,000 ft MSL and up · IFR only · a drone can never get here</text>
 
   <!-- Class E background -->
-  <rect x="0" y="72" width="960" height="358" fill="#6aa3d80c"/>
-  <text x="945" y="95" fill="#9a978f" font-size="14" text-anchor="end">CLASS E — everywhere above the floors below (no auth needed unless it touches the surface)</text>
+  <rect x="0" y="58" width="960" height="412" fill="#6aa3d80c"/>
+  <text x="950" y="76" fill="#9a978f" font-size="13" text-anchor="end">CLASS E — controlled airspace filling the sky above the floors below</text>
 
-  <!-- Class B wedding cake -->
+  <!-- 400 ft ceiling line -->
+  <line x1="0" y1="438" x2="960" y2="438" stroke="#d4a942" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="10" y="431" fill="#d4a942" font-size="12">← 400 ft AGL</text>
+
+  <!-- ground / Class G -->
+  <rect x="0" y="470" width="960" height="46" fill="#5dbb6322" stroke="#5dbb63"/>
+  <text x="480" y="497" fill="#5dbb63" font-size="14" text-anchor="middle" font-weight="bold">CLASS G — uncontrolled · surface up to the Class E floor · NO authorization needed</text>
+
+  <!-- CLASS B wedding cake -->
   <g stroke="#6aa3d8" stroke-width="2.5" fill="#6aa3d81f">
-    <rect x="45"  y="120" width="250" height="95"/>
-    <rect x="90"  y="215" width="160" height="105"/>
-    <rect x="130" y="320" width="80"  height="110"/>
+    <rect x="55" y="112" width="190" height="54"/>
+    <rect x="85" y="166" width="130" height="94"/>
+    <rect x="115" y="260" width="70" height="210"/>
   </g>
-  <text x="170" y="148" fill="#6aa3d8" font-size="16" font-weight="bold" text-anchor="middle">CLASS B</text>
-  <text x="170" y="168" fill="#9a978f" font-size="13" text-anchor="middle">solid BLUE rings</text>
-  <text x="170" y="410" fill="#e8e6e0" font-size="13" text-anchor="middle">big hub airport</text>
+  <text x="150" y="137" fill="#6aa3d8" font-size="15" font-weight="bold" text-anchor="middle">CLASS B</text>
+  <text x="150" y="156" fill="#cfd6de" font-size="12" text-anchor="middle">solid BLUE rings</text>
+  <g class="p107-auth"><rect x="120" y="395" width="60" height="33" rx="5" fill="#e0605533" stroke="#e06055"/>
+    <text x="150" y="409" fill="#e06055" font-size="10" font-weight="bold" text-anchor="middle">AUTH</text>
+    <text x="150" y="422" fill="#e06055" font-size="10" font-weight="bold" text-anchor="middle">REQ'D</text></g>
 
-  <!-- Class C -->
+  <!-- CLASS C -->
   <g stroke="#d268a8" stroke-width="2.5" fill="#d268a81f">
-    <rect x="360" y="215" width="220" height="80"/>
-    <rect x="425" y="295" width="90"  height="135"/>
+    <rect x="305" y="212" width="150" height="72"/>
+    <rect x="345" y="284" width="70" height="186"/>
   </g>
-  <text x="470" y="243" fill="#d268a8" font-size="16" font-weight="bold" text-anchor="middle">CLASS C</text>
-  <text x="470" y="263" fill="#9a978f" font-size="13" text-anchor="middle">solid MAGENTA rings</text>
-  <text x="470" y="410" fill="#e8e6e0" font-size="13" text-anchor="middle">mid-size towered</text>
+  <text x="380" y="241" fill="#d268a8" font-size="15" font-weight="bold" text-anchor="middle">CLASS C</text>
+  <text x="380" y="260" fill="#cfd6de" font-size="12" text-anchor="middle">solid MAGENTA rings</text>
+  <g class="p107-auth"><rect x="350" y="395" width="60" height="33" rx="5" fill="#e0605533" stroke="#e06055"/>
+    <text x="380" y="409" fill="#e06055" font-size="10" font-weight="bold" text-anchor="middle">AUTH</text>
+    <text x="380" y="422" fill="#e06055" font-size="10" font-weight="bold" text-anchor="middle">REQ'D</text></g>
 
-  <!-- Class D -->
+  <!-- vignette gap + drone flying in Class G (OK) -->
+  <rect class="p107-vig" x="432" y="410" width="118" height="9" fill="#d268a8"/>
+  <text x="491" y="403" fill="#d268a8" font-size="11" text-anchor="middle">E floor 700 AGL (vignette)</text>
+  <g class="p107-drone"><text x="491" y="452" font-size="20" text-anchor="middle">🛸</text></g>
+  <text x="491" y="466" fill="#5dbb63" font-size="10" text-anchor="middle" font-weight="bold">✓ under vignette = Class G</text>
+
+  <!-- CLASS D -->
   <g stroke="#6aa3d8" stroke-width="2.5" stroke-dasharray="8 5" fill="#6aa3d81f">
-    <rect x="650" y="310" width="110" height="120"/>
+    <rect x="600" y="330" width="105" height="140"/>
   </g>
-  <text x="705" y="338" fill="#6aa3d8" font-size="16" font-weight="bold" text-anchor="middle">CLASS D</text>
-  <text x="705" y="358" fill="#9a978f" font-size="13" text-anchor="middle">DASHED blue</text>
+  <text x="652" y="356" fill="#6aa3d8" font-size="15" font-weight="bold" text-anchor="middle">CLASS D</text>
+  <text x="652" y="374" fill="#cfd6de" font-size="12" text-anchor="middle">DASHED blue</text>
+  <g class="p107-auth"><rect x="618" y="395" width="68" height="33" rx="5" fill="#e0605533" stroke="#e06055"/>
+    <text x="652" y="409" fill="#e06055" font-size="10" font-weight="bold" text-anchor="middle">AUTH</text>
+    <text x="652" y="422" fill="#e06055" font-size="10" font-weight="bold" text-anchor="middle">REQ'D</text></g>
 
-  <!-- Class E surface -->
+  <!-- CLASS E to surface -->
   <g stroke="#d268a8" stroke-width="2.5" stroke-dasharray="8 5" fill="#d268a81f">
-    <rect x="810" y="310" width="110" height="120"/>
+    <rect x="775" y="330" width="130" height="140"/>
   </g>
-  <text x="865" y="338" fill="#d268a8" font-size="15" font-weight="bold" text-anchor="middle">E to SFC</text>
-  <text x="865" y="358" fill="#9a978f" font-size="13" text-anchor="middle">DASHED magenta</text>
-
-  <!-- E @ 700 vignette floor -->
-  <line x1="225" y1="378" x2="415" y2="378" stroke="#d268a8" stroke-width="7" opacity="0.30"/>
-  <text x="320" y="368" fill="#d268a8" font-size="12" text-anchor="middle">E floor at 700 AGL (vignette)</text>
-
-  <!-- 400 ft line + drone -->
-  <line x1="0" y1="398" x2="960" y2="398" stroke="#d4a942" stroke-width="1.5" stroke-dasharray="4 4"/>
-  <text x="8" y="392" fill="#d4a942" font-size="13">← your world: 400 ft AGL</text>
-  <text x="330" y="392" fill="#d4a942" font-size="16">🛸</text>
-
-  <!-- ground -->
-  <rect x="0" y="430" width="960" height="40" fill="#5dbb6322" stroke="#5dbb63"/>
-  <text x="480" y="456" fill="#5dbb63" font-size="15" text-anchor="middle">CLASS G — uncontrolled, surface up to the E floor · NO authorization needed</text>
-
-  <!-- auth badges -->
-  <g font-size="12" fill="#e06055" font-weight="bold">
-    <text x="170" y="345" text-anchor="middle">AUTH REQUIRED</text>
-    <text x="470" y="320" text-anchor="middle">AUTH REQUIRED</text>
-    <text x="705" y="378" text-anchor="middle">AUTH REQUIRED</text>
-    <text x="865" y="378" text-anchor="middle">AUTH REQUIRED</text>
-  </g>
+  <text x="840" y="356" fill="#d268a8" font-size="15" font-weight="bold" text-anchor="middle">E to SURFACE</text>
+  <text x="840" y="374" fill="#cfd6de" font-size="12" text-anchor="middle">DASHED magenta</text>
+  <g class="p107-auth"><rect x="806" y="395" width="68" height="33" rx="5" fill="#e0605533" stroke="#e06055"/>
+    <text x="840" y="409" fill="#e06055" font-size="10" font-weight="bold" text-anchor="middle">AUTH</text>
+    <text x="840" y="422" fill="#e06055" font-size="10" font-weight="bold" text-anchor="middle">REQ'D</text></g>
 </svg>
 <p><b>The whole game in one rule:</b> 14 CFR 107.41 — you need ATC authorization (LAANC) in Class <b>B, C, D, and E-that-touches-the-surface</b>. Class G and Class E with a 700/1,200-ft floor need nothing, because at ≤400 ft you're underneath E anyway.</p>
 <ul>
@@ -155,10 +159,10 @@ ${spot("spot_cooperstown", "Fig 26: Cooperstown (S32) — the exam's favorite: C
   <text x="255" y="288" fill="#e8e6e0" font-size="14" text-anchor="middle">shelf floor: 1,300 MSL (the "13")</text>
 
   <!-- drones -->
-  <text x="255" y="352" font-size="18" text-anchor="middle">🛸</text>
+  <g class="p107-drone"><text x="255" y="352" font-size="18" text-anchor="middle">🛸</text></g>
   <text x="255" y="330" fill="#5dbb63" font-size="13" font-weight="bold" text-anchor="middle">UNDER the shelf at 400 AGL:</text>
   <text x="255" y="313" fill="#5dbb63" font-size="13" text-anchor="middle">outside Class C — no auth needed</text>
-  <text x="520" y="330" font-size="18" text-anchor="middle">🛸</text>
+  <g class="p107-auth"><text x="520" y="330" font-size="18" text-anchor="middle">🛸</text></g>
   <text x="530" y="310" fill="#e06055" font-size="13" font-weight="bold" text-anchor="middle">inside the core ring: AUTH REQUIRED</text>
 </svg>
 <p><b>Rule:</b> every altitude printed on a sectional — Class C shelves (41/13), Class D ceilings ([24] = 2,400), MEF figures, obstacle bold numbers — is <b>MSL</b>, height above sea level. The ONLY AGL numbers are the ones in <b>(parentheses)</b> on obstacles and the E-floor conventions (700/1,200 AGL).</p>
@@ -356,6 +360,35 @@ ${spot("spot_cooperstown", "Fig 26: Cooperstown — a magenta (non-towered) fiel
 <p>A <b>TAF</b> is the same code as a forecast: valid within 5 SM of the airport for 24-30 hours; date/time groups like 0512/0618 = from the 5th 12Z to the 6th 18Z.</p>
 <button class="primary" onclick="showFig(12)">Open the full Figure 12 METAR page</button>
 `},
+
+/* ------------------------------------------------ 9 · Chart Detective (guided tour) */
+{
+  title: "Chart Detective — guided tour of a real sectional",
+  tagline: "Step through the exact Savannah Class C chart, one symbol at a time",
+  drill: ["faa-08","air-02","air-03","cht-08","faa-05","ops-24"],
+  html: `
+<p>Below is the real Savannah Class C excerpt from the exam's Figure 23. Step through it and the highlight glides to each feature with a plain-English read-out — this is exactly what the exam expects you to decode.</p>
+<div id="charttour"></div>
+<p style="margin-top:14px"><b>Once this clicks, three exam questions (8, and any Class C shelf/CTAF question) become automatic.</b> The whole skill is: find the two magenta rings, read the fraction as ceiling-over-floor in MSL, and locate the CTAF in the data block.</p>
+`,
+  tour: {
+    fig: "spot_savannah",
+    steps: [
+      { x: 14, y: 28, w: 50, h: 60, title: "The two magenta rings = Class C",
+        text: "Solid magenta rings drawn as a bullseye: an inner CORE circle over the airport and an outer SHELF ring. Any operation inside either ring needs ATC authorization (LAANC). Everything you decode next hangs off these two rings." },
+      { x: 50, y: 11, w: 17, h: 9, title: "The airspace label",
+        text: "'SAVANNAH CLASS C' printed on the chart confirms the class. The class tells you the rule; the numbers inside tell you the shape. Towered Class C always sits over a blue-symbol airport." },
+      { x: 15, y: 44, w: 11, h: 14, title: "The shelf fraction: 41 / 13",
+        text: "Read it as a fraction: ceiling OVER floor, both in hundreds of feet MSL. 41/13 = top 4,100 MSL, floor 1,300 MSL. This is exam question 8 — the shelf floor is 1,300 MSL, not AGL. Charted altitudes are ALWAYS MSL unless in parentheses." },
+      { x: 24, y: 55, w: 13, h: 13, title: "The core fraction: 41 / SFC",
+        text: "Over the airport the inner ring reads 41/SFC — 4,100 MSL down to the SURFACE. No shelf here: you need authorization from the ground up. That's why you can't launch a drone at the field itself without LAANC." },
+      { x: 30, y: 64, w: 13, h: 13, title: "The airport the Class C protects",
+        text: "The blue airport symbol (Savannah/Hilton Head Intl, SAV) is what all this airspace exists to protect — blue = towered. Class C wraps busy towered fields; that traffic is why you coordinate before flying nearby." },
+      { x: 63, y: 69, w: 18, h: 8, title: "The CTAF / tower frequency",
+        text: "In the airport data block, the frequency by the solid Ⓒ is the CTAF (here the control tower doubles as it). Monitor it with a scanner so you hear inbound traffic — the same skill as the data-block lesson, now on a live chart." }
+    ]
+  }
+},
 ];
 
 /* METAR interactive data */

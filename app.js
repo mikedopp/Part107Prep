@@ -473,7 +473,38 @@ function renderLesson(i) {
       box.className = "feedback okq"; box.innerHTML = `<b>${esc(tok)}</b> — ${esc(expl)}`;
     });
   }
+  if (L.tour) initTour(L.tour);
   window.scrollTo(0, 0);
+}
+
+/* Chart Detective guided tour */
+let tourState = null;
+function initTour(tour) {
+  const host = $("#charttour"); if (!host) return;
+  tourState = { tour, i: 0 };
+  host.innerHTML =
+    `<div class="tourstage"><img src="figures/${tour.fig}.png" alt="Guided sectional chart tour">
+       <div class="tourhot" id="tourhot"></div></div>
+     <div class="tourdots" id="tourdots">${tour.steps.map((_, j) =>
+        `<span class="tourdot" onclick="tourGo(${j})">${j + 1}</span>`).join("")}</div>
+     <div class="tourcap" id="tourcap"></div>
+     <div class="btnrow" style="margin-top:10px">
+       <button onclick="tourGo(tourState.i-1)">← Prev</button>
+       <button class="primary" onclick="tourGo(tourState.i+1)">Next →</button>
+       <button onclick="showSpot('${tour.fig}')">🔍 Open full chart</button>
+     </div>`;
+  tourGo(0);
+}
+function tourGo(n) {
+  if (!tourState) return;
+  const steps = tourState.tour.steps;
+  tourState.i = (n + steps.length) % steps.length;
+  const s = steps[tourState.i];
+  const hot = $("#tourhot");
+  hot.style.left = s.x + "%"; hot.style.top = s.y + "%";
+  hot.style.width = s.w + "%"; hot.style.height = s.h + "%";
+  $("#tourcap").innerHTML = `<span class="tourstep">Step ${tourState.i + 1} of ${steps.length} — ${esc(s.title)}</span><br>${esc(s.text)}`;
+  document.querySelectorAll("#tourdots .tourdot").forEach((d, j) => d.classList.toggle("on", j === tourState.i));
 }
 function startLessonDrill(i) {
   const L = window.LESSONS[i];
@@ -491,7 +522,7 @@ function showSpot(name) {
 function renderReference() {
   $("#main").innerHTML = `<div class="card"><h2>Reference library (local copies)</h2><ul class="reflist">
     <li><a href="faa_docs/remote_pilot_study_guide.pdf" target="_blank">FAA Remote Pilot Study Guide</a> — the primary study text; the exam is written from this.</li>
-    <li><a href="faa_docs/akts_supplement.pdf" target="_blank">FAA-CT-8080-2H Testing Supplement</a> — every figure the real exam can show you (you get this exact book at the testing center).</li>
+    <li><a href="https://www.faa.gov/sites/faa.gov/files/training_testing/testing/supplements/sport_rec_private_akts.pdf" target="_blank">FAA-CT-8080-2H Testing Supplement</a> (176 MB, from faa.gov) — every figure the real exam can show you (you get this exact book at the testing center). The 8 UAG-relevant figures are already built into Chart School.</li>
     <li><a href="faa_docs/uag_questions.pdf" target="_blank">Official FAA UAG sample questions</a> — all 46 are in this app's bank.</li>
   </ul>
   <h2>Online</h2><ul class="reflist">
@@ -516,8 +547,8 @@ window.addEventListener("DOMContentLoaded", () => {
   }));
   $("#figmodal").addEventListener("click", (e) => { if (e.target.id === "figmodal" || e.target.id === "figclose") $("#figmodal").style.display = "none"; });
   $("#figimg").addEventListener("click", function () { this.classList.toggle("zoomed"); });
-  const m = location.hash.match(/^#lesson-(\d+)$/);
-  if (m && window.LESSONS[Number(m[1])]) { show("charts"); renderLesson(Number(m[1])); }
+  const m = location.hash.match(/^#lesson-(\d+)(?:-step-(\d+))?$/);
+  if (m && window.LESSONS[Number(m[1])]) { show("charts"); renderLesson(Number(m[1])); if (m[2]) tourGo(Number(m[2]) - 1); }
   else if (location.hash === "#charts") show("charts");
   else show("home");
 });

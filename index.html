@@ -83,6 +83,24 @@
   .metar-token { cursor: pointer; padding: 3px 6px; border-radius: 6px; border: 1px solid transparent; }
   .metar-token:hover { border-color: var(--gold); }
   .metar-token.sel { background: var(--gold); color: #1a1a1a; font-weight: 700; }
+  /* --- diagram animations (respect reduced-motion) --- */
+  @keyframes p107bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  @keyframes p107pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+  @keyframes p107shim { 0%,100% { opacity: .25; } 50% { opacity: .6; } }
+  @keyframes p107ring { 0%,100% { box-shadow: 0 0 0 3px rgba(212,169,66,.30), 0 0 14px rgba(212,169,66,.5); } 50% { box-shadow: 0 0 0 6px rgba(212,169,66,.55), 0 0 28px rgba(212,169,66,.95); } }
+  .p107-drone { animation: p107bob 2.6s ease-in-out infinite; }
+  .p107-auth { animation: p107pulse 2s ease-in-out infinite; }
+  .p107-vig { animation: p107shim 3s ease-in-out infinite; }
+  /* --- Chart Detective guided tour --- */
+  .tourstage { position: relative; max-width: 660px; margin: 8px auto 12px; border: 2px solid var(--gold-dim); border-radius: 8px; overflow: hidden; line-height: 0; }
+  .tourstage img { width: 100%; display: block; }
+  .tourhot { position: absolute; border: 3px solid var(--gold); border-radius: 6px; transition: left .5s cubic-bezier(.4,0,.2,1), top .5s cubic-bezier(.4,0,.2,1), width .5s cubic-bezier(.4,0,.2,1), height .5s cubic-bezier(.4,0,.2,1); pointer-events: none; animation: p107ring 1.5s ease-in-out infinite; }
+  .tourcap { background: var(--panel2); border-radius: 8px; padding: 12px 16px; font-size: 15px; min-height: 74px; }
+  .tourcap .tourstep { color: var(--gold); font-weight: 700; }
+  .tourdots { display: flex; gap: 6px; margin: 12px 0 4px; flex-wrap: wrap; align-items: center; }
+  .tourdot { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel2); color: var(--dim); cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+  .tourdot.on { background: var(--gold); color: #1a1a1a; font-weight: 700; border-color: var(--gold); }
+  @media (prefers-reduced-motion: reduce) { .p107-drone, .p107-auth, .p107-vig, .tourhot { animation: none !important; } }
   @media (max-width: 700px) { .barlabel { flex-basis: 150px; } }
 </style>
 </head>
@@ -106,14 +124,14 @@
   <button id="figclose">Close (or click outside)</button>
 </div>
 
-<script src="qbank_faa.js?v=2"></script>
-<script src="qbank_charts.js?v=2"></script>
-<script src="qbank_reg.js?v=2"></script>
-<script src="qbank_air.js?v=2"></script>
-<script src="qbank_wx.js?v=2"></script>
-<script src="qbank_load.js?v=2"></script>
-<script src="qbank_ops.js?v=2"></script>
-<script src="charts.js?v=2"></script>
-<script src="app.js?v=2"></script>
+<script src="qbank_faa.js?v=8"></script>
+<script src="qbank_charts.js?v=8"></script>
+<script src="qbank_reg.js?v=8"></script>
+<script src="qbank_air.js?v=8"></script>
+<script src="qbank_wx.js?v=8"></script>
+<script src="qbank_load.js?v=8"></script>
+<script src="qbank_ops.js?v=8"></script>
+<script src="charts.js?v=8"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>
