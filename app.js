@@ -486,8 +486,8 @@ function initExplore(cfg) {
   const charts = cfg.charts || [{ name: "Chart", fig: cfg.fig, hotspots: cfg.hotspots }];
   exState = { charts, ci: 0, cfg: charts[0], s: 1, tx: 0, ty: 0, drag: null };
   host.innerHTML =
-    `<div class="mappicker" id="mappicker">${charts.map((c, i) =>
-        `<button data-c="${i}" class="${i === 0 ? "on" : ""}">${esc(c.name)}</button>`).join("")}</div>
+    `${charts.length > 1 ? `<div class="mappicker" id="mappicker">${charts.map((c, i) =>
+        `<button data-c="${i}" class="${i === 0 ? "on" : ""}">${esc(c.name)}</button>`).join("")}</div>` : ""}
      <div id="mapstage"></div>`;
   host.querySelectorAll("#mappicker button").forEach(b =>
     b.addEventListener("click", () => exSelectChart(Number(b.dataset.c))));
@@ -621,14 +621,16 @@ function renderScenarios() {
   const S2 = window.SCENARIOS || [];
   if (!S2.length) { $("#main").innerHTML = `<div class="card"><p>No scenarios loaded.</p></div>`; return; }
   if (scenIdx >= S2.length) scenIdx = 0;
+  const cur = S2[scenIdx];
   let h = `<div class="card"><h2>🗺 Real-world scenarios</h2>
-    <p>Location briefings that tie it all together — read the local METAR, name the airspace, know who to contact and whether you can even fly. Pick a place:</p>
+    <p>Location briefings on the <b>real FAA sectional</b> — read the local METAR, name the airspace, know who to contact and whether you can even fly. Pick a place:</p>
     <div class="mappicker" id="scenpicker">${S2.map((s, i) =>
       `<button data-s="${i}" class="${i === scenIdx ? "on" : ""}">${esc(s.name)}</button>`).join("")}</div></div>
-    <div class="card lesson scen">${S2[scenIdx].html}</div>`;
+    <div class="card lesson scen">${typeof SCEN_WARN !== "undefined" ? SCEN_WARN : ""}${cur.html}</div>`;
   $("#main").innerHTML = h;
   document.querySelectorAll("#scenpicker button").forEach(b =>
     b.addEventListener("click", () => { scenIdx = Number(b.dataset.s); renderScenarios(); }));
+  if (cur.explore) initExplore(cur.explore);
   window.scrollTo(0, 0);
 }
 

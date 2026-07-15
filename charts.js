@@ -443,12 +443,12 @@ ${spot("spot_cooperstown", "Fig 26: Cooperstown — a magenta (non-towered) fiel
 /* ------------------------------------------------ 10 · Interactive sectional (tap & zoom) */
 {
   title: "Interactive sectional — tap any symbol",
-  tagline: "The real Coeur d'Alene chart: drag to pan, scroll to zoom, tap a dot to decode it",
+  tagline: "11 real charts — 5 close-up crops + all 6 full-size exam pages: pan, zoom, tap to decode",
   drill: ["faa-05","cht-08","cht-09","air-05","cht-06","cht-10"],
   html: `
-<p><b>Five real exam charts you can explore.</b> Pick a chart, then drag to pan, scroll or use the ± buttons to zoom, and <b>tap any numbered dot</b> to highlight that symbol and read what it means. Works with mouse or touch.</p>
+<p><b>Eleven real exam charts you can explore</b> — five close-up crops and all six <b>FULL-SIZE testing-supplement pages</b> (the same pages you get printed at the PSI center). Pick a chart, then drag to pan, scroll or use the ± buttons to zoom, and <b>tap any numbered dot</b> to highlight that symbol and read what it means. Works with mouse or touch.</p>
 <div id="chartexplore"></div>
-<p style="margin-top:14px"><b>Switch charts</b> with the buttons up top: data blocks & navaids (COE), the Class C bullseye (Savannah), Class E to the surface (Jamestown), a Military Operations Area (Devils Lake), and military training routes (Deshler). Every symbol has one fixed meaning — once these are automatic, the airspace questions are just reading.</p>
+<p style="margin-top:14px"><b>Crops</b> teach one neighborhood at a time; the <b>FULL pages</b> put every exam question's feature in context — zoom in exactly like you'll pore over the paper book on test day. Every symbol has one fixed meaning — once these are automatic, the airspace questions are just reading.</p>
 `,
   explore: {
     charts: [
@@ -521,9 +521,104 @@ ${spot("spot_cooperstown", "Fig 26: Cooperstown — a magenta (non-towered) fiel
         text: "Hiltner (Pvt), circled R = private. Low traffic, Class G." },
       { x: 46, y: 80, w: 36, h: 13, title: "Putnam Co (OWX) data block",
         text: "AWOS 120.525 · field elevation 764 MSL · *L 45 = 4,500-ft runway. Read every data block the same way." }
+    ] },
+    { name: "FULL Fig 20 — Norfolk / Elizabeth City", fig: "figure_20", hotspots: [
+      { x: 33.9, y: 30.7, w: 13.3, h: 14.9, title: "Class C fractions (40/12, 40/20, 40/SFC)",
+        text: "Norfolk's Class C rings: each fraction is ceiling/floor in hundreds of feet MSL — 4,000 over 1,200; 4,000 over 2,000; 4,000 to the surface in the core. Same grammar as Savannah, different numbers." },
+      { x: 38.2, y: 69.8, w: 22.4, h: 9.3, title: "Elizabeth City (ECG) data block",
+        text: "ELIZABETH CITY CGAS/RGNL (ECG): CT-120.5Ⓒ, ASOS 124.375, elevation 11, lighted 7,200-ft runway, RP for runways 1, 10, 19. The Coast Guard air station shares the field — expect helicopters." },
+      { x: 41.8, y: 80.0, w: 21.8, h: 3.2, title: "The balloon caution box (exam Q9)",
+        text: "'CAUTION: UNMARKED BALLOON ON CABLE TO 3008' MSL. CHECK NOTAMS.' Read it literally — MSL, not AGL. That single word is the whole exam question." }
+    ] },
+    { name: "FULL Fig 21 — Devils Lake / Garrison", fig: "figure_21", hotspots: [
+      { x: 65.5, y: 41.9, w: 29.1, h: 23.3, title: "Devils Lake West MOA (exam Q10)",
+        text: "The magenta-hatched boundary. Activity hours live in the chart legend's Special Use Airspace panel — that's the exam answer. The gray IR644-649 line crossing it is an instrument military training route." },
+      { x: 18.2, y: 46.5, w: 31.5, h: 18.6, title: "Garrison (D05) — the lat/long target (exam Q24)",
+        text: "47°40'N 101°26'W plots here: count tick marks from the printed 48°N and 101°W lines (1 tick = 1 minute). Garrison's block: 1937 elevation, lighted 3,700-ft runway, CTAF 122.9Ⓒ." }
+    ] },
+    { name: "FULL Fig 22 — Coeur d'Alene (terrain)", fig: "figure_22", hotspots: [
+      { x: 24.2, y: 47.9, w: 27.9, h: 14.0, title: "COE data block + Class E note (exam Q5)",
+        text: "The CTAF question: 122.8 with the Ⓒ. Just above it the chart warns 'See NOTAMs/Directory for Class E (sfc) eff hrs' — the dashed magenta surface area is part-time." },
+      { x: 66.1, y: 7.0, w: 26.1, h: 7.9, title: "Contour interval legend",
+        text: "'CONTOUR INTERVAL 500 feet' — this chart's brown lines step every 500 ft, with shaded relief. Terrain here tops 6,000-7,000 MSL: your 400-ft AGL ceiling follows every fold of it." }
+    ] },
+    { name: "FULL Fig 23 — Savannah (Class C)", fig: "figure_23", hotspots: [
+      { x: 46.1, y: 59.5, w: 44.8, h: 28.8, title: "Savannah Class C bullseye (exam Q8)",
+        text: "Both 41/13 shelf labels, the 41/SFC core, and the blue towered airport — the full picture the cropped lesson taught, in context on the full page." },
+      { x: 11.5, y: 44.2, w: 13.9, h: 5.1, title: "Bulldog B & C MOA",
+        text: "Another MOA — magenta hatching along its border. Note how much of this chart is special-use airspace; the Southeast is full of military training areas." },
+      { x: 33.9, y: 58.1, w: 16.4, h: 3.9, title: "'CTC SAVANNAH APP WITHIN 20 NM'",
+        text: "A contact box: manned pilots must call Savannah Approach on 118.4/354.0 within 20 NM. For you it flags the radius where arriving IFR traffic is being vectored low — heads-up airspace even outside the rings." }
+    ] },
+    { name: "FULL Fig 26 — Jamestown / restricted", fig: "figure_26", hotspots: [
+      { x: 15.2, y: 6.5, w: 54.5, h: 16.7, title: "R-5401 / R-5402 / R-5403 restricted areas",
+        text: "Blue-hatched rings with 'excludes airspace when active' notes and a phone number box — restricted areas need the controlling agency's permission when hot." },
+      { x: 66.7, y: 23.3, w: 27.9, h: 16.7, title: "Cooperstown (exam Q18)",
+        text: "The traffic-pattern question's airport: magenta = non-towered, CTAF 122.9Ⓒ, runway 13/31 running NW-SE. Left downwind for RWY 13 puts the airplane northeast (announced as 'east') of the field." },
+      { x: 30.3, y: 51.2, w: 31.5, h: 22.8, title: "Jamestown — Class E surface + 700 vignette",
+        text: "Dashed magenta = Class E to the surface (authorization required); the soft brown band = E at 700 AGL (you fly under it in Class G). Non-towered, so no Class D despite the big rings — the blue circle is the VOR compass rose." }
+    ] },
+    { name: "FULL Fig 59 — Toledo (Class C + MTR)", fig: "figure_59", hotspots: [
+      { x: 25.5, y: 18.6, w: 41.2, h: 25.6, title: "Toledo Class C",
+        text: "Solid magenta rings around Toledo Express with 47/SFC and 47/20 fractions — ceiling 4,700 MSL. Same bullseye grammar, third city; if you can read Savannah you can read Toledo." },
+      { x: 13.9, y: 46.5, w: 26.7, h: 18.6, title: "VR1667 MTR stack (exam Q30)",
+        text: "The gray military-training-route lines: 4-digit VR numbers = entire route at or below 1,500 AGL. Fast movers at drone altitude." },
+      { x: 61.2, y: 20.0, w: 15.8, h: 3.5, title: "'CTC TOLEDO APP WITHIN 20 NM'",
+        text: "Toledo Approach's contact box on 126.1/307.0 — the 20-NM radius where arrivals are worked. Compare with Savannah's: these boxes appear around every Class C." }
     ] }
     ]
   }
+},
+
+/* ------------------------------------------------ 11 · Nasty weather, fully decoded */
+{
+  title: "Nasty weather — +TSRA, FZRA & a TAF, fully decoded",
+  tagline: "The two reports that mean 'put it away', and how to read a forecast to plan around them",
+  drill: ["wx-03","wx-04","wx-05","wx-13","wx-14","faa-39","wx-17"],
+  html: `
+<p>Two METARs every remote pilot must recognize on sight, decoded to the last character — plus a full TAF so you can see trouble coming. Each is a hard <b>NO-GO</b>; the skill is knowing <i>why</i>.</p>
+
+<h3>1 · Summer convective — heavy thunderstorm (<code>+TSRA</code>)</h3>
+<div class="metar" style="font-size:15px">KMCI 211852Z 24025G43KT 1SM +TSRA SCT008 BKN015CB OVC040 24/22 A2970 RMK AO2 PK WND 24048/1847 TSB47 RAB47 SLP054 P0043</div>
+<div style="overflow-x:auto"><table>
+<tr><th>Group</th><th>Decode</th><th>Why it's dangerous</th></tr>
+<tr><td><code>24025G43KT</code></td><td>Wind 240° true, 25 kt gusting 43</td><td>A 43-kt gust is half again your 87-kt max and will overpower a small multirotor instantly. Gust fronts run <b>15–20 miles ahead</b> of the storm — the air is violent long before the rain reaches you.</td></tr>
+<tr><td><code>1SM</code></td><td>Visibility 1 statute mile</td><td>Far below the Part 107 <b>3 SM</b> minimum. Grounded on visibility alone.</td></tr>
+<tr><td><code>+TSRA</code></td><td><b>+</b> heavy · <b>TS</b> thunderstorm · <b>RA</b> rain</td><td>Thunderstorm = lightning, hail, and the big one: <b>microbursts</b> — downdrafts to 6,000 ft/min with severe low-level wind shear. Unsurvivable for a light UA.</td></tr>
+<tr><td><code>BKN015CB</code></td><td>Broken layer 1,500 ft AGL, cumulonimbus</td><td><b>CB = cumulonimbus</b>, the thunderstorm cloud itself. Its presence in a report is a stop sign. Ceiling 1,500 also boxes you in.</td></tr>
+<tr><td><code>SCT008 … OVC040</code></td><td>Scattered 800, overcast 4,000 ft AGL</td><td>Low ragged cloud with the 500-ft clearance rule leaves no usable altitude.</td></tr>
+<tr><td><code>24/22</code></td><td>Temp 24°C, dewpoint 22°C</td><td>Warm and nearly saturated (2° spread) — the moisture that feeds the convection.</td></tr>
+<tr><td><code>PK WND 24048/1847</code></td><td>Peak wind 240° at <b>48 kt</b> at :47 past the hour</td><td>The remarks confirm it gusted to 48. <code>TSB47/RAB47</code> = thunderstorm and rain both began at :47 — this cell is building right now.</td></tr>
+</table></div>
+<p class="scengo bad">Verdict: <b>NO-GO</b>, and don't wait it out on-site — a thunderstorm's gust front and lightning can arrive from a cell you can still see 10–15 miles away. Land and leave.</p>
+
+<h3>2 · Winter icing — freezing rain (<code>FZRA</code>)</h3>
+<div class="metar" style="font-size:15px">KORD 141751Z 08012KT 2SM -FZRA BR OVC004 M01/M02 A3001 RMK AO2 CIG 003V007 SLP168 P0002 T10111022</div>
+<div style="overflow-x:auto"><table>
+<tr><th>Group</th><th>Decode</th><th>Why it's dangerous</th></tr>
+<tr><td><code>-FZRA</code></td><td><b>-</b> light · <b>FZ</b> freezing · <b>RA</b> rain</td><td>Supercooled rain that freezes <b>on contact</b>. Ice builds on props and airframe in minutes — added weight, a wrecked airfoil, prop imbalance, and sudden loss of lift. "Light" doesn't save you; icing is the killer here.</td></tr>
+<tr><td><code>M01/M02</code></td><td>Temp −1°C, dewpoint −2°C</td><td>Below freezing with a 1° spread = saturated, sub-zero air: the exact recipe for airframe ice and persistent freezing fog.</td></tr>
+<tr><td><code>OVC004</code></td><td>Overcast 400 ft AGL</td><td>A 400-ft ceiling with the 500-ft cloud-clearance rule = no legal altitude at all.</td></tr>
+<tr><td><code>2SM BR</code></td><td>Visibility 2 SM in mist</td><td>Below the 3 SM minimum.</td></tr>
+<tr><td><code>CIG 003V007</code></td><td>Ceiling variable 300–700 ft</td><td>Remarks: the ceiling is bouncing between 300 and 700 — unstable, deteriorating conditions.</td></tr>
+<tr><td><code>T10111022</code></td><td>Precise temp −1.1°C / dewpoint −2.2°C</td><td>The RMK confirms sub-zero to a tenth of a degree. Any visible moisture now means ice.</td></tr>
+</table></div>
+<p class="scengo bad">Verdict: <b>NO-GO.</b> Icing has no "light" exception for a small UA — the moment ice touches a spinning prop you lose it. Freezing rain is one of the few conditions more dangerous to a drone than a thunderstorm.</p>
+
+<h3>3 · Reading a TAF to plan around it</h3>
+<p>A TAF forecasts the airport's next 24–30 hrs. Use it to pick a flight window with no nasty change groups. Decoded line by line:</p>
+<div class="metar" style="font-size:14px; line-height:1.9">TAF KDEN 211130Z 2112/2218 20010KT P6SM SCT100<br>&nbsp;&nbsp;FM211700 24015G25KT P6SM SCT120 BKN200<br>&nbsp;&nbsp;TEMPO 2120/2124 27025G40KT 2SM +TSRA BKN050CB<br>&nbsp;&nbsp;FM220300 30008KT P6SM SKC<br>&nbsp;&nbsp;PROB30 2206/2210 3SM -SHRA BR</div>
+<div style="overflow-x:auto"><table>
+<tr><th>Line</th><th>Decode</th><th>What you do with it</th></tr>
+<tr><td><code>KDEN 211130Z 2112/2218</code></td><td>Denver, issued 21st 1130Z, valid 21st 12Z → 22nd 18Z</td><td>Your planning window is this whole span. Zulu — convert to local.</td></tr>
+<tr><td><code>20010KT P6SM SCT100</code></td><td>Base: wind 200°/10, vis 6+ SM, scattered 10,000</td><td>The "good" baseline. <code>P6SM</code> = plenty of visibility.</td></tr>
+<tr><td><code>FM211700 …</code></td><td><b>From</b> 1700Z: a lasting change — 24015G25, still 6+ SM, broken 20,000</td><td>Gusts to 25 after 17Z. Flyable for a capable aircraft, but note the trend.</td></tr>
+<tr><td><code>TEMPO 2120/2124 27025G40 2SM +TSRA BKN050CB</code></td><td><b>Temporary</b> 20Z–24Z: gusts 40, 2 SM, heavy thunderstorm, CB at 5,000</td><td><b>This is your stop.</b> Be on the ground and packed up before 20Z — TEMPO means it can hit at any time in that window.</td></tr>
+<tr><td><code>FM220300 30008KT P6SM SKC</code></td><td><b>From</b> 22nd 0300Z: wind 300°/8, 6+ SM, sky clear</td><td>The storm has passed — clean air. A great post-frontal window if you can fly that early.</td></tr>
+<tr><td><code>PROB30 2206/2210 3SM -SHRA BR</code></td><td>30% chance, 06Z–10Z: 3 SM, light rain showers, mist</td><td><b>PROB30</b> = 30% probability. Marginal (right at 3 SM) — plan a backup.</td></tr>
+</table></div>
+<p><b>Bottom line:</b> a TAF turns "will it be flyable at 3 pm?" into a decision. Fly the clear baseline before 17Z or the clean air after the front; <b>never</b> plan a window that overlaps a <code>TEMPO</code> or <code>FM</code> group carrying <code>TS</code>, <code>FZ</code>, low ceilings, or big gusts. Always pair the TAF with the current METAR and a <a href="https://www.1800wxbrief.com" target="_blank">1800wxbrief.com</a> briefing.</p>
+`
 },
 ];
 

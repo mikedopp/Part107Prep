@@ -40,16 +40,18 @@ downloads a JSON backup.
 - **Dashboard**: projected exam score, per-area mastery bars, exam history, and the
   "Why you're failing" diagnosis — points lost per area, trap-pattern detection,
   weakest subtopics, and a study prescription.
-- **Chart School**: 10 visual lessons on reading sectional charts and weather — airspace
+- **Chart School**: 11 visual lessons on reading sectional charts and weather — airspace
   colors, data blocks, MSL vs AGL, obstacles/MEF, special-use airspace, lat/long
   plotting, traffic patterns, a **full METAR & TAF walkthrough with a code glossary**,
-  plus two hands-on chart tools:
+  and a **nasty-weather deep dive** (+TSRA heavy thunderstorm and FZRA freezing rain
+  decoded character-by-character, plus a complete TAF read to plan a flight window
+  around them) — plus two hands-on chart tools:
   - **Chart Detective** — an animated guided tour that steps through the real Savannah
     Class C chart one symbol at a time, a pulsing highlight gliding to each feature.
-  - **Interactive sectional** — **five real exam charts** (Coeur d'Alene data blocks,
-    Savannah Class C, Jamestown Class E surface, a Devils Lake MOA, and Deshler military
-    routes) you can **drag to pan, scroll/pinch to zoom, and tap any numbered symbol** to
-    highlight and decode it. Works with mouse and touch.
+  - **Interactive sectional** — **11 real exam charts**: five close-up crops *and all six
+    full-size FAA testing-supplement pages* (the exact pages handed to you at the PSI
+    center), each with tappable decoded hotspots. **Drag to pan, scroll/pinch to zoom,
+    tap any numbered symbol.** Works with mouse and touch.
 
   Lessons use animated diagrams (respecting `prefers-reduced-motion`) plus spotlight
   crops from the real FAA testing-supplement figures, and drill you on the matching
@@ -58,16 +60,19 @@ downloads a JSON backup.
 ![Interactive sectional: pick a chart, then tap a numbered symbol to highlight and decode it](docs/interactive.png)
 
 ![METAR & TAF walkthrough with glossary](docs/metar.png)
-- **Scenarios**: real-world location briefings that tie everything together. Each picks a
-  place, shows a labeled situational map, decodes the local METAR with a "so what for
-  your drone" column, names the airspace class, and tells you **who to contact / whether
-  you can even get clearance** — plus local hazards. Ships with **Layton, UT** (Hill AFB
-  Class D corridor, Great Salt Lake / Antelope Island restrictions, Wasatch terrain) and
-  **Salt Lake City** (KSLC Class B, hospitals, tall buildings, freeway/107.145 limits,
-  stadium TFRs). Every scenario carries a "study aid, not an authorization — verify in
-  LAANC/B4UFLY" banner, and the airspace facts are cited to FAA / state sources.
+- **Scenarios**: real-world location briefings **on the actual FAA Salt Lake City
+  sectional (July 2026 edition)** — each is an interactive pan/zoom/tap chart of the real
+  place, a decoded local METAR with a "so what for your drone" column, the airspace
+  class, **who to contact / whether you can even get clearance**, local hazards, and a
+  go/no-go verdict. Five locations: **Layton** (Hill AFB Class D corridor), **Salt Lake
+  City** (KSLC Class B, downtown), **Ogden Canyon** (gap winds, charted magnetic
+  disturbance), **Provo** (KPVU Class D, BYU-stadium TFR, building TCU convection), and
+  **Antelope Island in winter** (Class G under the B shelf — legal air over
+  permit-restricted land). Every scenario carries a "study aid, not an authorization —
+  verify in LAANC/B4UFLY" banner, and the airspace facts are cited to FAA / state
+  sources.
 
-![Layton scenario: situational map, decoded METAR, airspace and clearance briefing](docs/scenario.png)
+![Layton scenario: the real sectional with tappable hotspots, decoded METAR, airspace and clearance briefing](docs/scenario.png)
 - **Figures**: the 8 testing-supplement figures the FAA questions reference
   (sectionals, METAR block, load-factor chart) rendered at 200 DPI in `figures/`,
   shown in a click-to-zoom viewer.
