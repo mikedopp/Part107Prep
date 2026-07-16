@@ -109,6 +109,7 @@ let session = null; // current quiz session
 let timerInt = null;
 
 function show(view) {
+  $("#main").classList.toggle("wide", view === "scenarios");
   document.querySelectorAll("nav button").forEach(b => b.classList.toggle("active", b.dataset.v === view));
   if (view !== "quiz" && timerInt) { clearInterval(timerInt); timerInt = null; }
   if (view === "home") renderHome();
@@ -118,6 +119,8 @@ function show(view) {
   if (view === "charts") renderChartSchool();
   if (view === "scenarios") renderScenarios();
   if (view === "reference") renderReference();
+  if (view === "gonogo") renderGoNoGo();
+  if (view === "system") renderSystemCheck();
 }
 
 /* ---------- home / analytics ---------- */
@@ -171,10 +174,13 @@ function renderHome() {
   // Diagnosis
   if (total >= 20) h += renderDiagnosis(ts);
 
-  h += `<div class="card"><h2>Data</h2><p>
+  h += `<div class="card"><h2>Data</h2><p class="btnrow">
     <button onclick="exportData()">Export progress</button>
+    <label class="buttonlike" for="progressImport">Import progress</label>
+    <input class="sr-only" id="progressImport" type="file" accept="application/json,.json" onchange="importData(this.files[0])">
     <button class="danger" onclick="if(confirm('Erase all progress?')){localStorage.removeItem('${SKEY}');location.reload()}">Reset all progress</button>
-    <small>${QB.length} questions in bank · ${total} answers recorded · progress saved locally in this browser</small></p></div>`;
+    <small>${QB.length} questions in bank · ${total} answers recorded · progress saved locally in this browser</small></p>
+    <p id="importStatus" class="meta" role="status" aria-live="polite"></p></div>`;
 
   $("#main").innerHTML = h;
 }
@@ -238,6 +244,30 @@ function exportData() {
   a.href = URL.createObjectURL(blob);
   a.download = "part107_progress_" + new Date().toISOString().slice(0, 10) + ".json";
   a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+async function importData(file) {
+  const status = $("#importStatus");
+  if (!file) return;
+  try {
+    const incoming = JSON.parse(await file.text());
+    if (!incoming || !Array.isArray(incoming.events) || !Array.isArray(incoming.exams)) {
+      throw new Error("That file is not a Part 107 Prep progress export.");
+    }
+    const validEvents = incoming.events.filter(e => e && typeof e.q === "string" && (e.ok === 0 || e.ok === 1) && Number.isFinite(e.t));
+    const validExams = incoming.exams.filter(e => e && Number.isFinite(e.ts) && Number.isFinite(e.score) && Number.isFinite(e.total));
+    if (validEvents.length !== incoming.events.length || validExams.length !== incoming.exams.length) {
+      throw new Error("The export contains malformed progress records.");
+    }
+    if (!confirm(`Import ${validEvents.length} answers and ${validExams.length} exam results? This replaces progress in this browser or app.`)) return;
+    S = { events: validEvents, exams: validExams };
+    save();
+    if (status) status.textContent = `Imported ${validEvents.length} answers and ${validExams.length} exam results.`;
+    renderHome();
+  } catch (err) {
+    if (status) status.textContent = err.message || "Could not import that file.";
+  }
 }
 
 /* ---------- study mode ---------- */
@@ -506,7 +536,7 @@ function exSelectChart(ci) {
          <img src="figures/${cfg.fig}.png" alt="Interactive sectional chart">
          <div class="maphotbox" id="exbox" style="display:none"></div>
          ${cfg.hotspots.map((hd, i) =>
-            `<button class="maphot" data-i="${i}" style="left:${hd.x + hd.w / 2}%;top:${hd.y + hd.h / 2}%">${i + 1}</button>`).join("")}
+            `<button class="maphot" data-i="${i}" aria-label="Map callout ${i + 1}: ${esc(hd.title)}" style="left:${hd.x + hd.w / 2}%;top:${hd.y + hd.h / 2}%">${i + 1}</button>`).join("")}
        </div>
        <div class="mapzoom">
          <button onclick="exZoom(1.3)" title="zoom in">+</button>
@@ -514,7 +544,7 @@ function exSelectChart(ci) {
          <button onclick="exReset()" title="reset view">⟲</button>
        </div>
      </div>
-     <div class="tourcap" id="excap">Tap any numbered symbol on the chart to decode it.</div>`;
+     <div class="tourcap mapdecode" id="excap"><p><b>Tap a numbered symbol.</b> We will translate it into what it is, what it means, and what you do next.</p></div>`;
   const mv = $("#mv"), mw = $("#mw");
   mv.querySelectorAll(".maphot").forEach(b =>
     b.addEventListener("click", (e) => { e.stopPropagation(); exShow(Number(b.dataset.i)); }));
@@ -570,7 +600,14 @@ function exShow(i) {
   box.style.display = "block";
   box.style.left = h.x + "%"; box.style.top = h.y + "%";
   box.style.width = h.w + "%"; box.style.height = h.h + "%";
-  $("#excap").innerHTML = `<span class="tourstep">${i + 1}. ${esc(h.title)}</span><br>${esc(h.text)}`;
+  $("#excap").innerHTML = h.what ?
+    `<div class="decodehead"><span class="tourstep">${i + 1}. ${esc(h.title)}</span></div>
+     <div class="decodegrid">
+       <div><b>What it is</b><p>${esc(h.what)}</p></div>
+       <div><b>What it means</b><p>${esc(h.means)}</p></div>
+       <div><b>What you do</b><p>${esc(h.do)}</p></div>
+     </div>` :
+    `<span class="tourstep">${i + 1}. ${esc(h.title)}</span><br>${esc(h.text)}`;
   document.querySelectorAll("#mw .maphot").forEach((b, j) => b.classList.toggle("on", j === i));
 }
 
@@ -617,16 +654,59 @@ function showSpot(name) {
 
 /* ---------- scenarios ---------- */
 let scenIdx = 0;
+function scenarioAnswer(qi, ai) {
+  const q = window.SCENARIOS[scenIdx].brief.questions[qi];
+  const box = document.querySelector(`[data-sq="${qi}"]`);
+  if (!q || !box || box.dataset.answered) return;
+  box.dataset.answered = "1";
+  box.querySelectorAll("button").forEach((b, j) => {
+    b.disabled = true;
+    b.classList.toggle("correct", j === q.answer);
+    b.classList.toggle("wrong", j === ai && ai !== q.answer);
+  });
+  const feedback = box.querySelector(".scenario-feedback");
+  feedback.hidden = false;
+  feedback.className = `scenario-feedback ${ai === q.answer ? "okq" : "missq"}`;
+  feedback.innerHTML = `<b>${ai === q.answer ? "That is the pilot answer." : "That is the trap."}</b> ${esc(q.explanation)}${q.trap ? `<br><span class="trapline">Exam trap: ${esc(q.trap)}</span>` : ""}`;
+}
+
+function renderScenarioBrief(cur) {
+  const b = cur.brief;
+  const metarRows = b.metar.groups.map(g => `<tr><td><code>${esc(g.code)}</code></td><td>${esc(g.decode)}</td><td>${esc(g.impact)}</td></tr>`).join("");
+  const evidence = b.checks.map(c => `<li><b>${esc(c.label)}:</b> ${esc(c.text)}</li>`).join("");
+  const questions = b.questions.map((q, qi) => `<section class="scenario-question" data-sq="${qi}">
+    <p class="eyebrow">Exam check ${qi + 1}</p><h3>${esc(q.prompt)}</h3>
+    <div class="choices-btns">${q.choices.map((c, ai) => `<button class="choice" onclick="scenarioAnswer(${qi},${ai})">${String.fromCharCode(65 + ai)}. ${esc(c)}</button>`).join("")}</div>
+    <div class="scenario-feedback" hidden role="status"></div>
+  </section>`).join("");
+  const sources = b.sources.map(s => `<a href="${s.url}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join(" · ");
+  return `<div class="scenario-shell">
+    <section class="scenario-map" aria-label="Sectional chart briefing">
+      <p class="eyebrow">Mission</p><h2>${esc(b.mission)}</h2><p class="lede">${esc(b.intro)}</p>
+      <div id="chartexplore"></div>
+      <div class="plain-note"><b>New-pilot rule:</b> Chart altitudes are normally <b>MSL</b>. Your 400-foot drone limit is normally <b>AGL</b>. Those are different measuring sticks.</div>
+    </section>
+    <aside class="scenario-rail" aria-label="Pilot decision briefing">
+      <section><p class="eyebrow">Read the whole scene</p><ul class="briefchecks">${evidence}</ul></section>
+      <section><p class="eyebrow">Training METAR · ${esc(b.metar.station)}</p><div class="metar compact">${esc(b.metar.raw)}</div>
+        <p class="meta">${esc(b.metar.note)}</p><div class="tablewrap"><table><thead><tr><th>Code</th><th>Plain English</th><th>Drone impact</th></tr></thead><tbody>${metarRows}</tbody></table></div></section>
+      <section class="verdict ${b.verdict.level}"><p class="eyebrow">Pilot verdict</p><h2>${esc(b.verdict.title)}</h2><p>${esc(b.verdict.reason)}</p><ul>${b.verdict.actions.map(a => `<li>${esc(a)}</li>`).join("")}</ul></section>
+      <section><p class="eyebrow">How the exam comes at you</p>${questions}</section>
+      <p class="scensrc">Sources: ${sources}</p>
+    </aside>
+  </div>`;
+}
+
 function renderScenarios() {
   const S2 = window.SCENARIOS || [];
   if (!S2.length) { $("#main").innerHTML = `<div class="card"><p>No scenarios loaded.</p></div>`; return; }
   if (scenIdx >= S2.length) scenIdx = 0;
   const cur = S2[scenIdx];
-  let h = `<div class="card"><h2>🗺 Real-world scenarios</h2>
-    <p>Location briefings on the <b>real FAA sectional</b> — read the local METAR, name the airspace, know who to contact and whether you can even fly. Pick a place:</p>
+  let h = `<div class="card scenario-intro"><p class="eyebrow">Version 1.5 · scenario lab</p><h2>Real maps. Plain English. Pilot decisions.</h2>
+    <p>Start at the launch point, read the chart evidence, decode the training METAR, then make the call. The chart is allowed to look complicated. The explanation is not.</p>
     <div class="mappicker" id="scenpicker">${S2.map((s, i) =>
       `<button data-s="${i}" class="${i === scenIdx ? "on" : ""}">${esc(s.name)}</button>`).join("")}</div></div>
-    <div class="card lesson scen">${typeof SCEN_WARN !== "undefined" ? SCEN_WARN : ""}${cur.html}</div>`;
+    <div class="card lesson scen">${typeof SCEN_WARN !== "undefined" ? SCEN_WARN : ""}${cur.brief ? renderScenarioBrief(cur) : cur.html}</div>`;
   $("#main").innerHTML = h;
   document.querySelectorAll("#scenpicker button").forEach(b =>
     b.addEventListener("click", () => { scenIdx = Number(b.dataset.s); renderScenarios(); }));
@@ -647,8 +727,60 @@ function renderReference() {
   </ul>
   <h2>The exam itself</h2>
   <p>60 questions · 2 hours · 70% (42 correct) to pass · $175 at a PSI testing center · bring government ID. You get the printed 8080-2H figure book, scratch paper, and an on-screen calculator. Wrong answers aren't penalized — <b>never leave a blank</b>. Flag and return to time-sinks like lat/long plots.</p>
+  <h2>“Is there a Part 107.5?”</h2>
+  <p><b>Yes, but it is a section number, not a harder certificate.</b> <a href="https://www.ecfr.gov/current/title-14/chapter-I/subchapter-F/part-107/subpart-A/section-107.5" target="_blank">14 CFR §107.5</a> covers falsification, reproduction, or alteration of records. <b>Part 108</b> is a separate proposed rule for routine beyond-visual-line-of-sight operations; it is not “Part 107 level two” and it is not the current Remote Pilot knowledge test.</p>
   <h2>Figures in this app</h2>
   <div class="btnrow">${[2, 12, 20, 21, 22, 23, 26, 59].map(f => `<button onclick="showFig(${f})">Figure ${f}</button>`).join("")}</div></div>`;
+}
+
+/* ---------- system check / dependency disclosure ---------- */
+function systemDiagnostics() {
+  const host = window.PART107_HOST || {};
+  const desktop = host.mode === "desktop";
+  return {
+    "Delivery mode": desktop ? "Windows desktop app" : "Web browser",
+    "Part 107 Prep": host.appVersion || "1.5 web",
+    "Architecture": host.architecture || navigator.platform || "Browser managed",
+    "WebView2 runtime": desktop ? (host.webView2Version || "Not detected") : "Not used by the webpage",
+    ".NET runtime": host.dotnetRuntime || "Not used by the webpage",
+    "Offline content": desktop ? host.contentPath : location.origin,
+    "Content packaging": host.contentPackaging || "Served directly by the web host",
+    "Progress storage": desktop ? host.dataPath : "Browser localStorage for this origin",
+    "Network requirement": "Not required for lessons, exams, charts, or saved progress",
+    "Network use": "Required only when opening external FAA, LAANC, weather, PSI, or source links",
+    "Build-only dependency": "The .NET 8 SDK and NuGet access are needed only to rebuild the Windows app"
+  };
+}
+
+async function copySystemDiagnostics() {
+  const text = Object.entries(systemDiagnostics()).map(([k, v]) => `${k}: ${v}`).join("\n");
+  const status = $("#systemCopyStatus");
+  try {
+    await navigator.clipboard.writeText(text);
+    status.textContent = "System details copied without secrets.";
+  } catch (_) {
+    status.textContent = "Copy was blocked. Select the table text manually.";
+  }
+}
+
+function renderSystemCheck() {
+  const d = systemDiagnostics();
+  const desktop = window.PART107_HOST?.mode === "desktop";
+  const webViewReady = !desktop || Boolean(window.PART107_HOST.webView2Version);
+  const rows = Object.entries(d).map(([k, v]) => `<tr><th scope="row">${esc(k)}</th><td>${esc(String(v))}</td></tr>`).join("");
+  $("#main").innerHTML = `<div class="card systemcheck">
+    <div class="systemhead"><div><h2>System Check</h2><p>Everything the trainer needs, including the parts Windows normally keeps out of sight.</p></div>
+      <span class="statuspill ${webViewReady ? "ok" : "fail"}">${webViewReady ? "READY" : "DEPENDENCY MISSING"}</span></div>
+    <div class="dependencystrip" aria-label="Dependency summary">
+      <div><b>Study content</b><span class="statuspill ok">BUNDLED</span><small>Questions, charts, scenarios, and PDFs</small></div>
+      <div><b>.NET runtime</b><span class="statuspill ok">BUNDLED</span><small>Self-contained in the Windows publish</small></div>
+      <div><b>WebView2</b><span class="statuspill ${webViewReady ? "ok" : "fail"}">${desktop ? (webViewReady ? "DETECTED" : "MISSING") : "WEB ONLY"}</span><small>${desktop ? "Edge rendering runtime installed on Windows" : "The browser already supplies the rendering engine"}</small></div>
+      <div><b>Internet</b><span class="statuspill info">OPTIONAL</span><small>Needed only for external operational links</small></div>
+    </div>
+    <h3>Dependency receipt</h3><div class="tablewrap"><table class="dependencytable"><tbody>${rows}</tbody></table></div>
+    <div class="btnrow"><button onclick="copySystemDiagnostics()">Copy system details</button><span id="systemCopyStatus" class="meta" role="status" aria-live="polite"></span></div>
+    <div class="systemnote"><b>Single-file desktop publish:</b> questions, charts, scenarios, icons, and PDFs are embedded in the executable. The app extracts a private versioned working copy under LocalAppData on first launch. WebView2 remains the one external runtime dependency and is reported above by exact detected version.</div>
+  </div>`;
 }
 
 /* ---------- boot ---------- */
@@ -667,6 +799,8 @@ window.addEventListener("DOMContentLoaded", () => {
   if (m && window.LESSONS[Number(m[1])]) { show("charts"); renderLesson(Number(m[1])); if (m[2]) tourGo(Number(m[2]) - 1); }
   else if (location.hash === "#charts") show("charts");
   else if (location.hash === "#scenarios") { const s = Number(new URLSearchParams(location.search).get("scen")); if (window.SCENARIOS && window.SCENARIOS[s]) scenIdx = s; show("scenarios"); }
+  else if (location.hash === "#gonogo") show("gonogo");
   else if (location.hash === "#reference") show("reference");
+  else if (location.hash === "#system") show("system");
   else show("home");
 });

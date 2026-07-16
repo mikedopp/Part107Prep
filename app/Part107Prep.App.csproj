@@ -8,37 +8,50 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>Part107Prep</AssemblyName>
     <RootNamespace>Part107Prep</RootNamespace>
-    <Version>1.0.0</Version>
+    <Version>1.5.0</Version>
+    <FileVersion>1.5.0.0</FileVersion>
+    <AssemblyVersion>1.5.0.0</AssemblyVersion>
     <Product>Part 107 Prep</Product>
     <AssemblyTitle>Part 107 Prep — Remote Pilot Exam Trainer</AssemblyTitle>
+    <ApplicationIcon>..\assets\Part107Prep.ico</ApplicationIcon>
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
-  <!-- Bundle the web app into wwwroot next to the exe (served offline via a virtual host) -->
+  <!-- Embed the complete offline site in the executable. The shell extracts a
+       versioned copy under LocalAppData on first launch, so publish is one EXE. -->
   <ItemGroup>
-    <Content Include="..\index.html">
-      <Link>wwwroot\index.html</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\*.js">
-      <Link>wwwroot\%(Filename)%(Extension)</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\figures\*.png">
-      <Link>wwwroot\figures\%(Filename)%(Extension)</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\faa_docs\remote_pilot_study_guide.pdf">
-      <Link>wwwroot\faa_docs\remote_pilot_study_guide.pdf</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\faa_docs\uag_questions.pdf">
-      <Link>wwwroot\faa_docs\uag_questions.pdf</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="..\index.html" LogicalName="wwwroot/index.html" />
+    <EmbeddedResource Include="..\*.js" LogicalName="wwwroot/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\figures\*.png" LogicalName="wwwroot/figures/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\assets\Part107Prep-icon-32.png" LogicalName="wwwroot/assets/Part107Prep-icon-32.png" />
+    <EmbeddedResource Include="..\assets\Part107Prep-icon-192.png" LogicalName="wwwroot/assets/Part107Prep-icon-192.png" />
+    <EmbeddedResource Include="..\faa_docs\remote_pilot_study_guide.pdf" LogicalName="wwwroot/faa_docs/remote_pilot_study_guide.pdf" />
+    <EmbeddedResource Include="..\faa_docs\uag_questions.pdf" LogicalName="wwwroot/faa_docs/uag_questions.pdf" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4078.44" />
   </ItemGroup>
+
+  <!-- The WebView2 package references both WinForms and WPF assemblies by default.
+       This shell is WinForms-only; remove the unused WPF reference and its WindowsBase conflict. -->
+  <Target Name="RemoveUnusedWebView2WpfReference" BeforeTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <Reference Remove="@(Reference)" Condition="'%(Reference.Filename)' == 'Microsoft.Web.WebView2.Wpf'" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="RemovePublishSidecars" AfterTargets="Publish">
+    <ItemGroup>
+      <PublishSidecar Include="$(PublishDir)*.pdb;$(PublishDir)*.xml" />
+    </ItemGroup>
+    <Delete Files="@(PublishSidecar)" />
+  </Target>
 
 </Project>

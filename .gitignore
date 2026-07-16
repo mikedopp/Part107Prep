@@ -9,3 +9,4 @@ faa_docs/rrpc_exam_2016.txt
 # .NET build output for the desktop app
 app/bin/
 app/obj/
+app/publish/

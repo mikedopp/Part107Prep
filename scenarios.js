@@ -5,7 +5,7 @@
    USFWS sources. Grid altitudes & TFRs change — verify in LAANC/B4UFLY every flight. */
 "use strict";
 
-const SCEN_WARN = `<div class="scenwarn">⚠ Study aid, not an authorization. Airspace grid ceilings and TFRs change — confirm the live picture in <b>LAANC</b> (Aloft/Avision/AutoPylot) or <b>B4UFLY</b> and get a <b>1800wxbrief.com</b> briefing before every flight. Chart: FAA Salt Lake City sectional, July 2026 edition.</div>`;
+const SCEN_WARN = `<div class="scenwarn"><b>Study briefing, not an authorization.</b> The maps and METARs teach the decision process. Airspace grids, TFRs, NOTAMs, weather, and land rules change — verify the live picture before every flight.</div>`;
 
 window.SCENARIOS = [
 
